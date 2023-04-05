@@ -65,7 +65,7 @@ int main(int argc, char ** argv)
 	// init SDL
 
 	SDL_Init(SDL_INIT_VIDEO);
-	SDL_Window * window = SDL_CreateWindow("annie are you okay, micheal jackson is my son",
+	SDL_Window * window = SDL_CreateWindow("Fishack",
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, 0);
 	SDL_Renderer * renderer = SDL_CreateRenderer(window, -1, 0);
 
