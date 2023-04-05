@@ -11,6 +11,7 @@ public :
 	double y = 0;
 	double forcex, forcey = 0;
 	double velx, vely = 0;
+	double targetx = 10, targety = 10;
 };
 
 struct shape
@@ -20,10 +21,10 @@ struct shape
 	// size is the amount of points it is
 };
 
-point averagepoint(point* points)
+point averagepoint(point* points, int start, int size)
 {
 	point average = { 0, 0 };
-	for (int i = 0; i < sizeof(points); i++)
+	for (int i = start; i < start + size; i++)
 	{
 		average.x += points[i].x;
 		average.y += points[i].y;
@@ -35,6 +36,21 @@ point averagepoint(point* points)
 	average.velx /= sizeof(points);
 	average.vely /= sizeof(points);
 	return average;
+}
+
+void movetotarget(shape* shapes, point* points, int numshapes)
+{
+	for (int shapi = 0; shapi < numshapes; shapi++)
+	{
+		for (int i = shapes[shapi].start; i < shapes[shapi].start + shapes[shapi].size; i++)
+		{
+			point average = averagepoint(points, shapes[shapi].start, shapes[shapi].size);
+			double targetx = points[i].targetx + average.x;
+			double targety = points[i].targety + average.y;
+			points[i].forcex = (targetx - points[i].x);
+			points[i].forcey = (targety - points[i].y);
+		}
+	}
 }
 
 double getarea(point* points)
@@ -50,12 +66,30 @@ double getarea(point* points)
 	return abs(area) / 2.0;
 }
 
+Uint32 LAST;
+
+void move(point* allpoints, int numpoints)
+{
+	Uint32 NOW = SDL_GetPerformanceCounter();
+	double deltaTime = 1 / ((NOW - LAST) * double(1000)/ SDL_GetPerformanceFrequency());
+	std::cout << deltaTime << std::endl;
+	LAST = NOW;
+	for (int i = 0; i < numpoints; i++)
+	{
+		allpoints[i].velx += allpoints[i].forcex * deltaTime;
+		allpoints[i].vely += allpoints[i].forcey * deltaTime;
+		allpoints[i].velx *= 0.1;
+		allpoints[i].vely *= 0.1;
+		allpoints[i].x += allpoints[i].velx * deltaTime;
+		allpoints[i].y += allpoints[i].vely * deltaTime;
+	}
+}
 
 int main(int argc, char ** argv)
 {
 	int numpoints = 6;
 	int numshapes = 2;
-	point allpoints[6] = { {0, 0}, {1, 100}, {10, 0}, {10, 100}, { 100, 40}, {60, 3} };
+	point allpoints[6] = { {0, 0}, {1, 100}, {10, 0}, {10, 100}, {100, 40}, {60, 3} };
 	shape shapes[2] = { {0, 3}, {3, 3} };
 
 	// variables
@@ -65,7 +99,7 @@ int main(int argc, char ** argv)
 	// init SDL
 
 	SDL_Init(SDL_INIT_VIDEO);
-	SDL_Window * window = SDL_CreateWindow("Fishack",
+	SDL_Window * window = SDL_CreateWindow("annie are you okay, micheal jackson is my son",
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, 0);
 	SDL_Renderer * renderer = SDL_CreateRenderer(window, -1, 0);
 
@@ -95,6 +129,9 @@ int main(int argc, char ** argv)
 			};
 			SDL_RenderDrawLine(renderer, allpoints[shapes[shapi].start].x, allpoints[shapes[shapi].start].y, allpoints[shapes[shapi].start + shapes[shapi].size - 1].x, allpoints[shapes[shapi].start + shapes[shapi].size - 1].y);
 		}
+
+		movetotarget(shapes, allpoints, numshapes);
+		move(allpoints, numpoints);
 
 		SDL_RenderPresent(renderer);
 	}
