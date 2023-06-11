@@ -16,12 +16,9 @@ point averagepoint(point* points, int start, int size)
 	point average = { 0, 0 };
 	for (int i = start; i < start + size; i++)
 	{
-		average.x += points[i].x / size;
-		average.y += points[i].y / size;
-		average.velx += points[i].velx;
-		average.vely += points[i].vely;
+		average += points[i];
 	};
-	//std::cout << average.x / size;
+	average /= size;
 	return average;
 }
 
@@ -32,16 +29,13 @@ void movetotarget(shape* shapes, point* points, int numshapes)
 		for (int i = shapes[shapi].start; i < shapes[shapi].start + shapes[shapi].size; i++)
 		{
 			point average = averagepoint(points, shapes[shapi].start, shapes[shapi].size);
-			float targetx = points[i].targetx + average.x;
-			float targety = points[i].targety + average.y;
-			float dist = sqrt(((targetx - points[i].x) * (targetx - points[i].x)) + ((targety - points[i].y) * (targety - points[i].y)));
-			if (dist == 0)
+			Vector Target = { average.x + points[i].x, average.y + points[i].y };
+			float dist = points[i].distTo(Target);
+			if (dist < 1)
 			{
 				dist = 1;
 			}
-			//points[i].forcex = (targetx - points[i].x) / dist;
-			//points[i].forcey = (targety - points[i].y) / dist;
-			std::cout << targetx - points[i].x;
+			points[i].force += (Target - points[i]) / dist;
 		}
 	}
 }
@@ -63,14 +57,12 @@ void move(point* allpoints, int numpoints)
 {	
 	for (int i = 0; i < numpoints; i++)
 	{
-		allpoints[i].velx += allpoints[i].forcex;
-		allpoints[i].vely += allpoints[i].forcey;
-		allpoints[i].velx = float(allpoints[i].velx * 0.4);
-		allpoints[i].vely = float(allpoints[i].vely * 0.4);
-		allpoints[i].forcex = 0;
-		allpoints[i].forcey = 0;
-		allpoints[i].x += allpoints[i].velx;
-		allpoints[i].y += allpoints[i].vely;
+		allpoints[i].vel += allpoints[i].force;
+		allpoints[i].x += allpoints[i].vel.x;
+		allpoints[i].y += allpoints[i].vel.y;
+		
+		allpoints[i].vel *= 0.4;
+		allpoints[i].force *= 0;
 	}
 }
 
