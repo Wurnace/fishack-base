@@ -57,12 +57,7 @@ void move(point* allpoints, int numpoints)
 {	
 	for (int i = 0; i < numpoints; i++)
 	{
-		allpoints[i].vel += allpoints[i].force;
-		allpoints[i].x += allpoints[i].vel.x;
-		allpoints[i].y += allpoints[i].vel.y;
-		
-		allpoints[i].vel *= 0.4;
-		allpoints[i].force *= 0;
+		allpoints[i].Update();
 	}
 }
 
