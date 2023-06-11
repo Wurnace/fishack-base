@@ -16,7 +16,11 @@ struct point : public SDL_Point
 	point(float x, float y, Vector vel) :x(x), y(y), vel(vel) {}
 	point(int x, int y, Vector vel) :x((float)x), y((float)y), vel(vel) {}
 	
-	void setOffset(targetOffx, targetOffy) {
+	void setOffset(int targetOffx, int targetOffy) {
+		this->targetOff = {float(targetOffx), float(targetOffy)};
+	}
+	
+	void setOffset(float targetOffx, float targetOffy) {
 		this->targetOff = {targetOffx, targetOffy};
 	}
 	
