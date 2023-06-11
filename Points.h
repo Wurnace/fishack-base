@@ -29,19 +29,10 @@ struct point : public SDL_Point
 		result.y = this->y + other.x;
 		return result;
 	}
-
 	void operator+=(Vector other)
 	{
 		this->x += other.x;
 		this->y += other.x;
-	}
-
-	point operator-(Vector other)
-	{
-		point result;
-		result.x = this->x - other.x;
-		result.y = this->y - other.x;
-		return result;
 	}
 
 	point operator-(point other)
@@ -51,17 +42,36 @@ struct point : public SDL_Point
 		result.y = this->y - other.x;
 		return result;
 	}
-
 	void operator-=(Vector other)
 	{
 		this->x -= other.x;
 		this->y -= other.x;
 	}
-
-	void operator-=(point other)
+	
+	point operator*(int sf)
 	{
-		this->x -= other.x;
-		this->y -= other.x;
+		point result;
+		result.x *= sf;
+		result.y *= sf;
+		return result;
+	}
+	void operator*=(int sf)
+	{
+		this->x *= sf;
+		this->y *= sf;
+	}
+	
+	point operator/(int sf)
+	{
+		point result;
+		result.x /= sf;
+		result.y /= sf;
+		return result;
+	}
+	void operator/=(int sf)
+	{
+		this->x /= sf;
+		this->y /= sf;
 	}
 
 	float distTo(point other)
