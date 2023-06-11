@@ -7,26 +7,26 @@ struct Vector
 {
 public:
 	Vector() {}
-	Vector(double x, double y) : x(x), y(y) {}
-	double x;
-	double y;
-	double mag()
+	Vector(float x, float y) : x(x), y(y) {}
+	float x;
+	float y;
+	float mag()
 	{
 		return sqrt((this->x * this->x) + (this->y * this->y));
 	}
 
-	void set(double x, double y)
+	void set(float x, float y)
 	{
 		this->x = x; this->y = y;
 	}
 
-	void setMag(double mag)
+	void setMag(float mag)
 	{
 		this->x *= mag / this->mag();
 		this->y *= mag / this->mag();
 	}
 
-	Vector setNewMag(double mag)
+	Vector setNewMag(float mag)
 	{
 		if (this->mag() != 0)
 		{
@@ -48,7 +48,7 @@ public:
 		return Vector(this->x, this->y);
 	}
 
-	double dot(Vector other)
+	float dot(Vector other)
 	{
 		return (this->x * other.x) + (this->y * other.y);
 	}
@@ -84,14 +84,14 @@ public:
 		result.y = this->y * other.x;
 		return result;
 	}
-	Vector operator*(double number)
+	Vector operator*(float number)
 	{
 		Vector result;
 		result.x = this->x * number;
 		result.y = this->y * number;
 		return result;
 	}
-	void operator*=(double number)
+	void operator*=(float number)
 	{
 		this->x *= number;
 		this->y *= number;
@@ -113,14 +113,14 @@ public:
 		this->x /= other.x;
 		this->y /= other.x;
 	}
-	Vector operator/(double number)
+	Vector operator/(float number)
 	{
 		Vector result;
 		result.x = this->x / number;
 		result.y = this->y / number;
 		return result;
 	}
-	void operator/=(double number)
+	void operator/=(float number)
 	{
 		this->x /= number;
 		this->y /= number;
