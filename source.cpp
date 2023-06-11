@@ -29,7 +29,7 @@ void movetotarget(shape* shapes, point* points, int numshapes)
 		for (int i = shapes[shapi].start; i < shapes[shapi].start + shapes[shapi].size; i++)
 		{
 			point average = averagepoint(points, shapes[shapi].start, shapes[shapi].size);
-			Vector Target = { average.x + points[i].x, average.y + points[i].y };
+			Vector Target = { average.x + points[i].targetOff.x, average.y + points[i].targetOff.y };
 			float dist = points[i].distTo(Target);
 			if (dist < 1)
 			{
