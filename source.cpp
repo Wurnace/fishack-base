@@ -71,14 +71,12 @@ int main(int argc, char ** argv)
 	int numpoints = 4;
 	int numshapes = 1;
 	point allpoints[4] = { {40, 40}, {80, 40}, {80, 80}, {40, 80} };
-	allpoints[0].targetx = -20;
-	allpoints[0].targety = -20;
-	allpoints[1].targetx = 20;
-	allpoints[1].targety = -20;
-	allpoints[2].targetx = 20;
-	allpoints[2].targety = 20;
-	allpoints[3].targetx = -20;
-	allpoints[3].targety = 20;
+	
+	allpoints[0].setOffset(-20, -20);
+	allpoints[1].setOffset(20, -20);
+	allpoints[2].setOffset(20, 20);
+	allpoints[3].setOffset(-20, 20);
+	
 	shape shapes[1] = {{0, 4}};
 
 	// variables
@@ -109,8 +107,8 @@ int main(int argc, char ** argv)
 
 		// TODO rendering code goes here
 		SDL_SetRenderDrawColor(renderer, 250, 0, 0, 255);
-//#define drawLine(ren, a, b, off, w, h) SDL_RenderDrawLine(ren, a.x - off.x + w, a.y - off.y + h, b.x - off.x + w, b.y - off.y + h);
-#define drawLine(ren, a, b, off, w, h) SDL_RenderDrawLine(ren, int(a.x) + w, int(a.y) + h, int(b.x) + w, int(b.y) + h);
+		//#define drawLine(ren, a, b, off, w, h) SDL_RenderDrawLine(ren, a.x - off.x + w, a.y - off.y + h, b.x - off.x + w, b.y - off.y + h);
+		#define drawLine(ren, a, b, off, w, h) SDL_RenderDrawLine(ren, int(a.x) + w, int(a.y) + h, int(b.x) + w, int(b.y) + h);
 		for (int shapi = 0; shapi < numshapes; shapi++)
 		{
 			point average = averagepoint(allpoints, shapes[shapi].start, shapes[shapi].size);
