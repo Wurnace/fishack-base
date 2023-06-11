@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
 
+#include "vector.h"
+
 struct POINT : public SDL_Point
 {
 	float x = 0;
