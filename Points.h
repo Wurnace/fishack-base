@@ -7,12 +7,19 @@ struct point : public SDL_Point
 {
 	float x = 0;
 	float y = 0;
+	
+	Vector targetOff;
+	
 	point() {}
 	point(float x, float y) :x(x), y(y) {}
 	point(int x, int y) :x((float)x), y((float)y) {}
 	point(float x, float y, Vector vel) :x(x), y(y), vel(vel) {}
 	point(int x, int y, Vector vel) :x((float)x), y((float)y), vel(vel) {}
-
+	
+	void setOffset(targetOffx, targetOffy) {
+		this->targetOff = {targetOffx, targetOffy};
+	}
+	
 	void add(Vector other)
 	{
 		this->operator+=(other);
