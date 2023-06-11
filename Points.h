@@ -104,7 +104,7 @@ struct point : public SDL_Point
 		this->vel += this->acc;
 		this->add(vel);
 
-		this->vel *= 0.998;
+		this->vel *= 0.4;
 		this->acc.set(0, 0);
 	}
 
@@ -112,7 +112,7 @@ struct point : public SDL_Point
 		this->vel += this->acc * delta;
 		this->add(vel * delta);
 
-		this->vel *= 0.998;
+		this->vel *= 0.4;
 		this->acc.set(0, 0);
 	}
 };
