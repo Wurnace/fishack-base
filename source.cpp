@@ -1,6 +1,7 @@
 #include <SDL.h>
 #include <iostream>
 
+#include "Points.h"
 #include "vector.h"
 
 struct point : public SDL_Point
