@@ -4,19 +4,6 @@
 #include "Points.h"
 #include "vector.h"
 
-struct point : public SDL_Point
-{
-public :
-	point() {}
-	point(float x, float y) :x(x), y(y) {}
-	point(float x, float y, float velx, float vely) :x(x), y(y), velx(velx), vely(vely) {}
-	float x = 0;
-	float y = 0;
-	float forcex, forcey = 0;
-	float velx, vely = 0;
-	float targetx = 0, targety = 0;
-};
-
 struct shape
 {
 	int start;
