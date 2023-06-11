@@ -3,15 +3,15 @@
 
 #include "vector.h"
 
-struct POINT : public SDL_Point
+struct point : public SDL_Point
 {
 	float x = 0;
 	float y = 0;
-	POINT() {}
-	POINT(float x, float y) :x(x), y(y) {}
-	POINT(int x, int y) :x((float)x), y((float)y) {}
-	POINT(float x, float y, Vector vel) :x(x), y(y), vel(vel) {}
-	POINT(int x, int y, Vector vel) :x((float)x), y((float)y), vel(vel) {}
+	point() {}
+	point(float x, float y) :x(x), y(y) {}
+	point(int x, int y) :x((float)x), y((float)y) {}
+	point(float x, float y, Vector vel) :x(x), y(y), vel(vel) {}
+	point(int x, int y, Vector vel) :x((float)x), y((float)y), vel(vel) {}
 
 	void add(Vector other)
 	{
@@ -22,9 +22,9 @@ struct POINT : public SDL_Point
 		return { this->x, this->y };
 	}
 
-	POINT operator+(Vector other)
+	point operator+(Vector other)
 	{
-		POINT result;
+		point result;
 		result.x = this->x + other.x;
 		result.y = this->y + other.x;
 		return result;
@@ -36,17 +36,17 @@ struct POINT : public SDL_Point
 		this->y += other.x;
 	}
 
-	POINT operator-(Vector other)
+	point operator-(Vector other)
 	{
-		POINT result;
+		point result;
 		result.x = this->x - other.x;
 		result.y = this->y - other.x;
 		return result;
 	}
 
-	POINT operator-(POINT other)
+	point operator-(point other)
 	{
-		POINT result;
+		point result;
 		result.x = this->x - other.x;
 		result.y = this->y - other.x;
 		return result;
@@ -58,13 +58,13 @@ struct POINT : public SDL_Point
 		this->y -= other.x;
 	}
 
-	void operator-=(POINT other)
+	void operator-=(point other)
 	{
 		this->x -= other.x;
 		this->y -= other.x;
 	}
 
-	float distTo(POINT other)
+	float distTo(point other)
 	{
 		return sqrt(
 			(this->x - other.x) * (this->x - other.x) + 
