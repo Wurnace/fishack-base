@@ -4,23 +4,70 @@
 #include "Points.h"
 #include "vector.h"
 
-struct shape
-{
-	int start;
-	int size;
-	// size is the amount of points it is
-};
-
 point averagepoint(point* points, int start, int size)
 {
 	point average = { 0, 0 };
 	for (int i = start; i < start + size; i++)
 	{
-		average += points[i];
+		average += points[i].getVector();
 	};
 	average /= size;
 	return average;
 }
+
+float averageangle(point* points, int start, int size)
+{
+	float average = 0;
+	for (int i = start; i < start + size; i++)
+	{
+		average += points[i].angleBetween(averagepoint(points, start, size) + points[i].targetOff);
+	};
+	return average / size;
+}
+
+struct shape
+{
+	int start;
+	int size;
+	// size is the amount of points it is
+
+	void assignOffset(point* points)
+	{
+		point average = averagepoint(points, this->start, this->size);
+		for (int i = this->start; i < this->start + this->size; i++)
+		{
+			points[i].setOffset(points[i] - average);
+		};
+	}
+
+	void jiggle(point* points)
+	{
+		for (int i = this->start; i < this->start + this->size; i++)
+		{
+			Vector random = { float(rand() % 5 - 2), float(rand() % 5 - 2) };
+			points[i] += random;
+		};
+	}
+	void movetotarget(point* points)
+	{
+		point average = averagepoint(points, this->start, this->size);
+		float angleaverage = averageangle(points, this->start, this->size);
+		for (int i = this->start; i < this->start + this->size; i++)
+		{
+			float angle = points[i].angleBetween(points[i] + points[i].targetOff);
+			Vector OffsetCopy = (points[i].targetOff).setAngleNew(angleaverage + angle);
+			if (OffsetCopy.mag() - (points[i].targetOff).mag() <= 0.001) continue;
+			Vector Target = { average.x + OffsetCopy.x, average.y + OffsetCopy.y };
+			
+			float dist = points[i].distTo(Target);
+			if (dist < 1)
+			{
+				dist = 1;
+			}
+			points[i].force += (Target - points[i].getVector()) / dist;
+		}
+	}
+};
 
 void movetotarget(shape* shapes, point* points, int numshapes)
 {
@@ -28,14 +75,7 @@ void movetotarget(shape* shapes, point* points, int numshapes)
 	{
 		for (int i = shapes[shapi].start; i < shapes[shapi].start + shapes[shapi].size; i++)
 		{
-			point average = averagepoint(points, shapes[shapi].start, shapes[shapi].size);
-			Vector Target = { average.x + points[i].targetOff.x, average.y + points[i].targetOff.y };
-			float dist = points[i].distTo(Target);
-			if (dist < 1)
-			{
-				dist = 1;
-			}
-			points[i].force += (Target - points[i]) / dist;
+			shapes[shapi].movetotarget(points);
 		}
 	}
 }
@@ -53,26 +93,29 @@ void movetotarget(shape* shapes, point* points, int numshapes)
 	return abs(area) / 2.0;
 }*/
 
-void move(point* allpoints, int numpoints)
+void move(point* allpoints, int numpoints, float deltaTime)
 {	
 	for (int i = 0; i < numpoints; i++)
 	{
-		allpoints[i].Update();
+		allpoints[i].Update(deltaTime);
 	}
 }
 
 int main(int argc, char ** argv)
 {
-	int numpoints = 4;
-	int numshapes = 1;
-	point allpoints[4] = { {40, 40}, {80, 40}, {80, 80}, {40, 80} };
+	Uint64 NOW = SDL_GetPerformanceCounter();
+	Uint64 LAST = 0;
+	double deltaTime = 0;
+	int numpoints = 8;
+	int numshapes = 2;
+	point allpoints[8] = { {40, 40}, {80, 40}, {80, 80}, {85, 40}, {125, 40}, {125, 80},};
+	shape shapes[2] = { {0, 3}, {3, 3}};
 	
-	allpoints[0].setOffset(-20, -20);
-	allpoints[1].setOffset(20, -20);
-	allpoints[2].setOffset(20, 20);
-	allpoints[3].setOffset(-20, 20);
-	
-	shape shapes[1] = {{0, 4}};
+	for (shape shapei : shapes)
+	{
+		shapei.assignOffset(allpoints);
+		shapei.jiggle(allpoints);
+	}
 
 	// variables
 	bool quit = false;
@@ -96,24 +139,29 @@ int main(int argc, char ** argv)
 		}
 
 		// clear window
+		LAST = NOW;
+		NOW = SDL_GetPerformanceCounter();
+
+		deltaTime = (double)((NOW - LAST)*30 / (double)SDL_GetPerformanceFrequency());
 
 		SDL_SetRenderDrawColor(renderer, 242, 242, 242, 255);
 		SDL_RenderClear(renderer);
 
 		// TODO rendering code goes here
-		SDL_SetRenderDrawColor(renderer, 250, 0, 0, 255);
-		//#define drawLine(ren, a, b, off, w, h) SDL_RenderDrawLine(ren, a.x - off.x + w, a.y - off.y + h, b.x - off.x + w, b.y - off.y + h);
-		#define drawLine(ren, a, b, off, w, h) SDL_RenderDrawLine(ren, int(a.x) + w, int(a.y) + h, int(b.x) + w, int(b.y) + h);
+		#define drawLine(ren, a, b, off, w, h) SDL_RenderDrawLine(ren, int(a.x - off.x + w), int(a.y - off.y + h), int(b.x - off.x + w), int(b.y - off.y + h));
+		//#define drawLine(ren, a, b, off, w, h) SDL_RenderDrawLine(ren, int(a.x) + w, int(a.y) + h, int(b.x) + w, int(b.y) + h);
 		for (int shapi = 0; shapi < numshapes; shapi++)
 		{
-			point average = averagepoint(allpoints, shapes[shapi].start, shapes[shapi].size);
+			SDL_SetRenderDrawColor(renderer, 250, 0, 0, 255);
+			point average = averagepoint(allpoints, shapes[0].start, shapes[0].size);
 			for (int i = shapes[shapi].start + 1; i < shapes[shapi].size + shapes[shapi].start; i++)
 			{
-				drawLine(renderer, allpoints[i], allpoints[i - 1], 0, 320, 240);
+				drawLine(renderer, allpoints[i], allpoints[i - 1], average, 320, 240);
 			};
+			SDL_SetRenderDrawColor(renderer, 0, 0, 250, 255);
 			drawLine(renderer, allpoints[shapes[shapi].start], allpoints[shapes[shapi].start + shapes[shapi].size - 1], average, 320, 240);
 		}
-		move(allpoints, numpoints);
+		move(allpoints, numpoints, float(deltaTime));
 		movetotarget(shapes, allpoints, numshapes);
 
 		SDL_RenderPresent(renderer);
