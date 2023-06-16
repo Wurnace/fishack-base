@@ -57,31 +57,31 @@ public:
 	{
 		Vector result;
 		result.x = this->x + other.x;
-		result.y = this->y + other.x;
+		result.y = this->y + other.y;
 		return result;
 	}
 	void operator+=(Vector other)
 	{
 		this->x += other.x;
-		this->y += other.x;
+		this->y += other.y;
 	}
 	Vector operator-(Vector other)
 	{
 		Vector result;
 		result.x = this->x - other.x;
-		result.y = this->y - other.x;
+		result.y = this->y - other.y;
 		return result;
 	}
 	void operator-=(Vector other)
 	{
 		this->x -= other.x;
-		this->y -= other.x;
+		this->y -= other.y;
 	}
 	Vector operator*(Vector other)
 	{
 		Vector result;
 		result.x = this->x * other.x;
-		result.y = this->y * other.x;
+		result.y = this->y * other.y;
 		return result;
 	}
 	Vector operator*(float number)
@@ -99,19 +99,19 @@ public:
 	void operator*=(Vector other)
 	{
 		this->x *= other.x;
-		this->y *= other.x;
+		this->y *= other.y;
 	}
 	Vector operator/(Vector other)
 	{
 		Vector result;
 		result.x = this->x / other.x;
-		result.y = this->y / other.x;
+		result.y = this->y / other.y;
 		return result;
 	}
 	void operator/=(Vector other)
 	{
 		this->x /= other.x;
-		this->y /= other.x;
+		this->y /= other.y;
 	}
 	Vector operator/(float number)
 	{
@@ -124,5 +124,16 @@ public:
 	{
 		this->x /= number;
 		this->y /= number;
+	}
+	void setAngle(float radians)
+	{
+		this->x = cos(radians) * this->mag();
+		this->y = sin(radians) * this->mag();
+	}
+	Vector setAngleNew(float radians)
+	{
+		Vector copy = this->copy();
+		copy.setAngle(radians);
+		return copy;
 	}
 };
