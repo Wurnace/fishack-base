@@ -58,9 +58,7 @@ struct shape
 		{
 			Vector OffsetCopy = (points[i].targetOff).rotateNew(angleaverage, {0, 0});
 			//if (OffsetCopy.mag() - (points[i].targetOff).mag() <= 0.001) continue;
-			Vector Target = { average.x + OffsetCopy.x, average.y + OffsetCopy.y };
-
-			points[i].moveToTarget(Target);
+			points[i].moveToTarget(average + OffsetCopy);
 		}
 	}
 };
