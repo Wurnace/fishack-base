@@ -125,15 +125,19 @@ public:
 		this->x /= number;
 		this->y /= number;
 	}
-	void setAngle(float radians)
+	void rotate(float radians, Vector centre)
 	{
-		this->x = cos(radians) * this->mag();
-		this->y = sin(radians) * this->mag();
+		this->x = ((this->x - centre.x)*cos(radians)) - ((this->y - centre.y)*sin(radians)) + centre.x;
+		this->y = ((this->x - centre.x)*sin(radians)) + ((this->y - centre.y)*cos(radians)) + centre.y;
 	}
-	Vector setAngleNew(float radians)
+	Vector rotateNew(float radians, Vector centre)
 	{
 		Vector copy = this->copy();
-		copy.setAngle(radians);
+		copy.rotate(radians, centre);
 		return copy;
+	}
+	float heading()
+	{
+		return atan2(this->y, this->x);
 	}
 };
