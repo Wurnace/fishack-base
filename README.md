@@ -1,2 +1,2 @@
 # fishack
-A Game of Evolution. A Game of the Sea. A Truely Fantastic Experience!
+silly little project that is probably impossible
