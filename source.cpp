@@ -60,12 +60,7 @@ struct shape
 			//if (OffsetCopy.mag() - (points[i].targetOff).mag() <= 0.001) continue;
 			Vector Target = { average.x + OffsetCopy.x, average.y + OffsetCopy.y };
 
-			float dist = points[i].distTo(Target);
-			if (dist < 1)
-			{
-				dist = 1;
-			}
-			points[i].force += (Target - points[i].getVector()) / dist;
+			points[i].moveToTarget(Target);
 		}
 	}
 };
