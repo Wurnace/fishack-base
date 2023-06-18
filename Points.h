@@ -122,7 +122,8 @@ struct point : public SDL_Point
 		this->force.set(0, 0);
 	}
 	
-	void moveToTarget(Vector target)float dist = points[i].distTo(Target);
+	void moveToTarget(Vector target) {
+		float dist = points[i].distTo(Target);
 		if (dist < 1)
 		{
 			dist = 1;
