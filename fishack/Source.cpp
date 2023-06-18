@@ -56,9 +56,9 @@ struct shape
 		float angleaverage = averageangle(points, this->start, this->size);
 		for (int i = this->start; i < this->start + this->size; i++)
 		{
-			Vector OffsetCopy = (points[i].targetOff).rotateNew(angleaverage, {0, 0});
+			Vector OffsetCopy = (points[i].targetOff).rotateNew(angleaverage, { 0, 0 });
 			//if (OffsetCopy.mag() - (points[i].targetOff).mag() <= 0.001) continue;
-			points[i].moveToTarget(average + OffsetCopy);
+			points[i].moveToTarget(average.getVector() + OffsetCopy);
 		}
 	}
 };
@@ -103,7 +103,7 @@ int main(int argc, char ** argv)
 	int numpoints = 4;
 	int numshapes = 1;
 	point allpoints[4] = { {40, 40}, {80, 40}, {80, 80}, {40, 80} };
-	shape shapes[1] = { {0, 4}};
+	shape shapes[1] = { {0, 4} };
 
 	for (shape shapei : shapes)
 	{

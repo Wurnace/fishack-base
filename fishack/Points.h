@@ -121,13 +121,13 @@ struct point : public SDL_Point
 		this->vel *= float(0.99);
 		this->force.set(0, 0);
 	}
-	
-	void moveToTarget(Vector target) {
-		float dist = points[i].distTo(Target);
+
+	void moveToTarget(Vector Target) {
+		float dist = this->distTo(Target);
 		if (dist < 1)
 		{
 			dist = 1;
 		}
-		this->applyForce( (Target - points[i].getVector()) / dist );
+		this->applyForce((Target - this->getVector()) / dist);
 	}
 };
