@@ -12,7 +12,6 @@ point averagepoint(point* points, int start, int size)
 		average += points[i].getVector();
 	};
 	average /= size;
-	std::cout << average.x << "," << average.y << std::endl;
 	return average;
 }
 
@@ -23,7 +22,10 @@ float averageangle(point* points, int start, int size)
 	for (int i = start; i < start + size; i++)
 	{
 		average += averagep.angleBetween(points[i]);
+		average -= averagep.angleBetween(averagep + points[i].targetOff);
 	};
+	if (average < 0) { average += 2 * M_PI; }
+	std::cout << average << std::endl;
 	return average / size;
 }
 
@@ -168,7 +170,6 @@ int main(int argc, char ** argv)
 			SDL_SetRenderDrawColor(renderer, 250, 0, 0, 255);
 			point average = averagepoint(allpoints, shapes[camerashape].start, shapes[camerashape].size);
 			SDL_RenderDrawPoint(renderer, int(average.x - average.x + 320), int(average.y - average.y + 240));
-			//std::cout << average.x << "," << average.y << std::endl;
 			for (int i = shapes[shapi].start + 1; i < shapes[shapi].size + shapes[shapi].start; i++)
 			{
 				drawLine(renderer, allpoints[i], allpoints[i - 1], average, 320, 240);
