@@ -58,7 +58,7 @@ struct shape
 		float angleaverage = averageangle(points, this->start, this->size);
 		for (int i = this->start; i < this->start + this->size; i++)
 		{
-			Vector OffsetCopy = (points[i].targetOff).rotateNew(angleaverage, average.getVector());
+			Vector OffsetCopy = (points[i].targetOff).rotateNew(angleaverage, { 0, 0 });
 			//if (OffsetCopy.mag() - (points[i].targetOff).mag() <= 0.001) continue;
 			points[i].moveToTarget(average.getVector() + OffsetCopy);
 		}
