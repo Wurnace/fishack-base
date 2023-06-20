@@ -125,11 +125,21 @@ public:
 		this->x /= number;
 		this->y /= number;
 	}
-	void rotate(float radians, Vector centre)
+	void rotate(float Angle, Vector Pivot)
 	{
-		this->x = ((this->x - centre.x)*cos(radians)) - ((this->y - centre.y)*sin(radians)) + centre.x;
-		this->y = ((this->x - centre.x)*sin(radians)) + ((this->y - centre.y)*cos(radians)) + centre.y;
+		if (Angle == 0)
+			return;
+
+		float s = sin(Angle);
+		float c = cos(Angle);
+
+		x -= Pivot.x;
+		y -= Pivot.y;
+
+		x = (x * c) - (y * s) + Pivot.x;
+		y = (x * s) + (y * c) + Pivot.y;
 	}
+
 	Vector rotateNew(float radians, Vector centre)
 	{
 		Vector copy = this->copy();

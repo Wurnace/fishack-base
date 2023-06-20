@@ -107,7 +107,8 @@ struct point : public SDL_Point
 
 	float angleBetween(point other)
 	{
-		return atan2(other.y - this->y, other.x - this->x);
+		// this point is the pivot, it is the angle between 2 points around me
+		return atan2(other.x - this->x, other.y - this->y);
 	}
 
 	void Update() {
