@@ -3,6 +3,9 @@
 
 #include "vector.h"
 
+#define Round(x, presc) round(x * presc) / presc
+// Round used in point::angleBetween();
+
 struct point : public SDL_Point
 {
 	float x = 0;
@@ -29,13 +32,20 @@ struct point : public SDL_Point
 		this->targetOff = { other.x, other.y };
 	}
 
-	void add(Vector other)
-	{
-		this->operator+=(other);
+	void set(float x, float y) {
+		this->x = x;
+		this->y = y;
+	}
+	void set(Vector other) {
+		this->set(other.x, other.y);
 	}
 
 	Vector getVector() {
 		return { this->x, this->y };
+	}
+
+	void add(Vector other) {
+		this->operator+=(other);
 	}
 
 	point operator+(Vector other)
@@ -105,13 +115,7 @@ struct point : public SDL_Point
 		this->force += force;
 	}
 
-	float angleBetween(point other)
-	{
-		// this point is the pivot, it is the angle between 2 points around me
-		float angle = atan2(other.y - this->y, other.x - this->x);
-		if (angle < 0) { angle += 2 * M_PI; }
-		return angle;
-	}
+	float angleBetween(point pt1, point pt2);
 
 	void Update() {
 		this->Update(1);
@@ -122,15 +126,28 @@ struct point : public SDL_Point
 		this->add(vel * delta);
 
 		this->vel *= float(0.99);
-		this->force.set(0, 0);
+		this->force.set(0 , 0);
 	}
 
-	void moveToTarget(Vector Target) {
-		float dist = this->distTo(Target);
-		if (dist < 1)
-		{
-			dist = 1;
-		}
-		this->applyForce((Target - this->getVector()) / dist);
-	}
+	void moveToTarget(Vector Target);
 };
+
+float point::angleBetween(point pt1, point pt2)
+{
+	point a = pt1 - *this;
+	point b = pt2 - *this;
+
+	float dot = a.x * b.x + a.y * b.y;
+	float magA = a.getVector().mag();
+	float magB = b.getVector().mag();
+	return acos(Round(dot / (magA * magB), 1000));
+}
+
+void point::moveToTarget(Vector Target) {
+	float dist = this->distTo(Target);
+	if (dist < 1)
+	{
+		dist = 1;
+	}
+	this->applyForce((Target - this->getVector()) / dist);
+}

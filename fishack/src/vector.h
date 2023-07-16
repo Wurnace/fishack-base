@@ -125,27 +125,40 @@ public:
 		this->x /= number;
 		this->y /= number;
 	}
-	void rotate(float Angle, Vector Pivot)
+
+	void rotate(double Angle, Vector Pivot = { 0, 0 })
 	{
-		if (Angle == 0)
+		return this->rotate(float(Angle), Pivot);
+	}
+	void rotate(float Angle, Vector Pivot = {0, 0})
+	{
+		if (int(Angle * 180 / M_PI) % 360 == 0)
 			return;
 
 		float s = sin(Angle);
 		float c = cos(Angle);
 
-		x -= Pivot.x;
-		y -= Pivot.y;
+		float x = this->x - Pivot.x;
+		float y = this->y - Pivot.y;
 
-		x = (x * c) - (y * s) + Pivot.x;
-		y = (x * s) + (y * c) + Pivot.y;
+		this->x = (x * c) - (y * s) + Pivot.x;
+		this->y = (x * s) + (y * c) + Pivot.y;
+
+		this->x = round(this->x * 1000) / 1000;
+		this->y = round(this->y * 1000) / 1000;
 	}
 
-	Vector rotateNew(float radians, Vector centre)
+	Vector rotateNew(double Angle, Vector Pivot = { 0, 0 })
 	{
-		Vector copy = this->copy();
-		copy.rotate(radians, centre);
-		return copy;
+		return this->rotateNew(float(Angle), Pivot);
 	}
+	Vector rotateNew(float radians, Vector Pivot = {0, 0})
+	{
+		Vector myCopy = this->copy();
+		myCopy.rotate(radians, Pivot);
+		return myCopy;
+	}
+
 	float heading()
 	{
 		return atan2(this->y, this->x);
