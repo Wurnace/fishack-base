@@ -29,11 +29,11 @@ int main(int argc, char ** argv)
 	Uint64 NOW = 0;
 	Uint64 LAST = 0;
 	double deltaTime = 0;
-	int numpoints = 4;
-	int numshapes = 1;
-	point allpoints[4] = { {-20, -20}, {20, -20}, {20, 20}, {-20, 20} };
+	int numpoints = 8;
+	int numshapes = 2;
+	point allpoints[10] = { {-20, -20}, {20, -20}, {20, 20}, {-20, 20}, {-40, -40}, {40, -40}, {40, 40}, {-40, 40} };
 
-	shape shapes[1] = { {0, 4} };
+	shape shapes[2] = { {0, 4}, {4, 4} };
 	for (shape shapei : shapes)
 	{
 		shapei.assignOffset(allpoints);
@@ -95,7 +95,7 @@ int main(int argc, char ** argv)
 		movetotarget(shapes, allpoints, numshapes);
 		move(allpoints, numpoints, float(deltaTime));
 		for (shape shapei : shapes) {
-			shapei.jiggle(allpoints);
+			//shapei.jiggle(allpoints);
 		}
 
 		SDL_RenderPresent(renderer);

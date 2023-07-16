@@ -67,7 +67,7 @@ void shape::jiggle(point* points)
 	for (int i = this->start; i < this->start + this->size; i++)
 	{
 		Vector unit_random = { float(rand() % 3 - 1), float(rand() % 3 - 1) };
-		points[i].vel += unit_random * 1/2;
+		points[i].vel += unit_random * 3;
 	};
 }
 
