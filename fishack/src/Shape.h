@@ -40,6 +40,7 @@ float averageangle(point* points, int start, int size, point averagep)
 	{
 		average += averagep.angleBetween(points[i], averagep + points[i].targetOff);
 	};
+	//std::cout << average / size << std::endl;
 	return average / size;
 }
 
