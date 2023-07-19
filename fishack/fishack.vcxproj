@@ -24,7 +24,7 @@
   <ItemGroup>
     <ClInclude Include="src\Points.h" />
     <ClInclude Include="src\Shape.h" />
-    <ClInclude Include="src\vector2.h" />
+    <ClInclude Include="src\Vector2.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 
-#include "vector2.h"
+#include "Vector2.h"
 
 #define Round(x, presc) round(x * presc) / presc
 // Round used in point::angleBetween();
@@ -125,8 +125,8 @@ struct point : public SDL_Point
 		this->vel += this->force * delta;
 		this->add(vel * delta);
 
-		this->vel *= float(0.999);
-		this->force.set(0 , 0);
+		this->vel *= 0.99f;
+		this->force *= 0.0f;
 	}
 
 	void moveToTarget(Vector Target);

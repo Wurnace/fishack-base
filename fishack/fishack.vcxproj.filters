@@ -26,7 +26,7 @@
     <ClInclude Include="src\Shape.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\vector2.h">
+    <ClInclude Include="src\Vector2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
