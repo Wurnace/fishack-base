@@ -23,10 +23,10 @@
     <ClInclude Include="src\Points.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\vector.h">
+    <ClInclude Include="src\Shape.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Shape.h">
+    <ClInclude Include="src\vector2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

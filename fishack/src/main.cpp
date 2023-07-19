@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "Points.h"
-#include "vector.h"
+#include "vector2.h"
 #include "Shape.h"
 
 void movetotarget(std::vector<shape> shapes, std::vector<point> points, int numshapes)
@@ -32,7 +32,12 @@ int main(int argc, char ** argv)
 	double deltaTime = 0;
 	int numpoints = 8;
 	int numshapes = 2;
+<<<<<<< HEAD
 	std::vector<point> allpoints = { {-20, -20}, {20, -20}, {20, 20}, {-20, 20}, {-40, -40}, {40, -40}, {40, 40}, {-40, 40} };
+=======
+	std::vector<point> allpoints;
+	
+>>>>>>> df2442ff3e2a86b4f89eae54df0324199879fa17
 
 	std::vector<shape> shapes = { {0, 4}, {4, 4} };
 	for (shape shapei : shapes)

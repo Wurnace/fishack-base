@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 
-#include "vector.h"
+#include "vector2.h"
 
 #define Round(x, presc) round(x * presc) / presc
 // Round used in point::angleBetween();
