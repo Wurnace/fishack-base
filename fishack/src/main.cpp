@@ -1,8 +1,9 @@
 #include <SDL.h>
 #include <iostream>
+#include <vector>
 
 #include "Points.h"
-#include "vector.h"
+#include "vector2.h"
 #include "Shape.h"
 
 void movetotarget(shape* shapes, point* points, int numshapes)
@@ -31,7 +32,8 @@ int main(int argc, char ** argv)
 	double deltaTime = 0;
 	int numpoints = 8;
 	int numshapes = 2;
-	point allpoints[10] = { {-20, -20}, {20, -20}, {20, 20}, {-20, 20}, {-40, -40}, {40, -40}, {40, 40}, {-40, 40} };
+	std::vector<point> allpoints;
+	
 
 	shape shapes[2] = { {0, 4}, {4, 4} };
 	for (shape shapei : shapes)
