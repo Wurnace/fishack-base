@@ -127,9 +127,8 @@ public:
 	}
 
 	void rotate(double Angle, Vector Pivot = { 0, 0 })
-	{
-		return this->rotate(float(Angle), Pivot);
-	}
+	{ return this->rotate(float(Angle), Pivot); }
+
 	void rotate(float Angle, Vector Pivot = {0, 0})
 	{
 		if (int(Angle * 180 / M_PI) % 360 == 0)
@@ -149,9 +148,8 @@ public:
 	}
 
 	Vector rotateNew(double Angle, Vector Pivot = { 0, 0 })
-	{
-		return this->rotateNew(float(Angle), Pivot);
-	}
+	{ return this->rotateNew(float(Angle), Pivot); }
+
 	Vector rotateNew(float radians, Vector Pivot = {0, 0})
 	{
 		Vector myCopy = this->copy();
@@ -161,6 +159,7 @@ public:
 
 	float heading()
 	{
-		return atan2(this->y, this->x);
+		if(this->y >= 0) return acos(this->x / this->mag());
+		return -acos(this->x / this->mag());
 	}
 };

@@ -52,6 +52,8 @@ int main(int argc, char ** argv)
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, 0);
 	SDL_Renderer * renderer = SDL_CreateRenderer(window, -1, 0);
 
+	float average = 0;
+
 	while (!quit)
 	{
 		while (SDL_PollEvent(&event))
@@ -72,7 +74,9 @@ int main(int argc, char ** argv)
 		// Calculate DeltaTime
 		NOW = SDL_GetTicks();
 		deltaTime = (NOW - LAST) * (15.0 / 1000.0f);
+		if (deltaTime > average) deltaTime = average;
 		if (deltaTime > 1.5) deltaTime = 1.5;
+		average = average * 0.99 + (NOW + LAST)/2 * 0.01;
 		LAST = NOW;
 
 		// Clear Window

@@ -125,43 +125,26 @@ struct point : public SDL_Point
 		this->vel += this->force * delta;
 		this->add(vel * delta);
 
-		this->vel *= float(0.9999);
+		this->vel *= float(0.999);
 		this->force.set(0 , 0);
 	}
 
 	void moveToTarget(Vector Target);
-	float rotateTest(point other);
 };
 
 float point::angleBetween(point pt1, point pt2)
 {
-	point a = pt1 - *this;
-	point b = pt2 - *this;
+	float a = (pt1.getVector() - this->getVector()).heading();
+	float b = (pt2.getVector() - this->getVector()).heading();
 
-	float dot = a.x * b.x + a.y * b.y;
-	float magA = a.getVector().mag();
-	float magB = b.getVector().mag();
-	
-	return acos(Round(dot / (magA * magB), 1000));
-
+	return a - b;
 }
 
 void point::moveToTarget(Vector Target) {
 	float dist = this->distTo(Target);
-	if (dist < 1)
+	if (dist < 25)
 	{
-		dist = 1;
+		dist = 25;
 	}
 	this->applyForce((Target - this->getVector()) / dist);
-}
-
-float point::rotateTest(point other) {
-	point b = {(other - *this).getVector().mag(), 0.0f};
-
-	b += this->getVector();
-	float dot = this->x * b.x + this->y * b.y;
-	float magA = this->getVector().mag();
-	float magB = b.getVector().mag();
-
-	return acos(Round(dot / (magA * magB), 1000));
 }
