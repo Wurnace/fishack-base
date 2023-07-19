@@ -1,11 +1,12 @@
 #include <SDL.h>
 #include <iostream>
+#include <vector>
 
 #include "Points.h"
 #include "vector.h"
 #include "Shape.h"
 
-void movetotarget(shape* shapes, point* points, int numshapes)
+void movetotarget(std::vector<shape> shapes, std::vector<point> points, int numshapes)
 {
 	for (int shapi = 0; shapi < numshapes; shapi++)
 	{
@@ -16,7 +17,7 @@ void movetotarget(shape* shapes, point* points, int numshapes)
 	}
 }
 
-void move(point* allpoints, int numpoints, float delta)
+void move(std::vector<point> allpoints, int numpoints, float delta)
 {
 	for (int i = 0; i < numpoints; i++)
 	{
@@ -31,9 +32,9 @@ int main(int argc, char ** argv)
 	double deltaTime = 0;
 	int numpoints = 8;
 	int numshapes = 2;
-	point allpoints[10] = { {-20, -20}, {20, -20}, {20, 20}, {-20, 20}, {-40, -40}, {40, -40}, {40, 40}, {-40, 40} };
+	std::vector<point> allpoints = { {-20, -20}, {20, -20}, {20, 20}, {-20, 20}, {-40, -40}, {40, -40}, {40, 40}, {-40, 40} };
 
-	shape shapes[2] = { {0, 4}, {4, 4} };
+	std::vector<shape> shapes = { {0, 4}, {4, 4} };
 	for (shape shapei : shapes)
 	{
 		shapei.assignOffset(allpoints);
@@ -84,7 +85,6 @@ int main(int argc, char ** argv)
 		SDL_RenderClear(renderer);
 
 	#define drawLine(ren, a, b, off, w, h) SDL_RenderDrawLine(ren, int(a.x - off.x + w), int(a.y - off.y + h), int(b.x - off.x + w), int(b.y - off.y + h));
-	// #define drawLine(ren, a, b, w, h) SDL_RenderDrawLine(ren, int(a.x) + w, int(a.y) + h, int(b.x) + w, int(b.y) + h);
 		for (int shapi = 0; shapi < numshapes; shapi++)
 		{
 			SDL_SetRenderDrawColor(renderer, 250, 0, 0, 255);

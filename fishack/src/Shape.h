@@ -1,10 +1,11 @@
 #pragma once
 
 #include <SDL.h>
+#include <vector>
 
 #include "Points.h"
 
-float getarea(point* points)
+float getarea(std::vector<point> points)
 {
 	int xpoints = sizeof(points);
 	float area = 0.0;
@@ -17,7 +18,7 @@ float getarea(point* points)
 	return float(abs(area) / 2.0);
 }
 
-point averagepoint(point* points, int start, int size)
+point averagepoint(std::vector<point> points, int start, int size)
 {
 	point average = { 0, 0 };
 	for (int i = start; i < start + size; i++)
@@ -28,7 +29,7 @@ point averagepoint(point* points, int start, int size)
 	return average;
 }
 
-float averageangle(point* points, int start, int size, point averagep)
+float averageangle(std::vector<point> points, int start, int size, point averagep)
 {
 	float average = 0;
 
@@ -50,12 +51,12 @@ struct shape
 	int size;
 	// size is the amount of points it is
 
-	void assignOffset(point* points);
-	void jiggle(point* points);
-	void movetotarget(point* points);
+	void assignOffset(std::vector<point> points);
+	void jiggle(std::vector<point> points);
+	void movetotarget(std::vector<point> points);
 };
 
-void shape::assignOffset(point* points) {
+void shape::assignOffset(std::vector<point> points) {
 	point average = averagepoint(points, this->start, this->size);
 	for (int i = this->start; i < this->start + this->size; i++)
 	{
@@ -63,7 +64,7 @@ void shape::assignOffset(point* points) {
 	};
 }
 
-void shape::jiggle(point* points)
+void shape::jiggle(std::vector<point> points)
 {
 	for (int i = this->start; i < this->start + this->size; i++)
 	{
@@ -72,14 +73,13 @@ void shape::jiggle(point* points)
 	};
 }
 
-void shape::movetotarget(point* points)
+void shape::movetotarget(std::vector<point> points)
 {
 	point average = averagepoint(points, this->start, this->size);
 	float angleaverage = averageangle(points, this->start, this->size, average);
 	for (int i = this->start; i < this->start + this->size; i++)
 	{
 		Vector OffsetCopy = (points[i].targetOff).rotateNew(angleaverage, { 0, 0 });
-		//if (OffsetCopy.mag() - (points[i].targetOff).mag() <= 0.001) continue;
 		points[i].moveToTarget(average.getVector() + OffsetCopy);
 	}
 }
