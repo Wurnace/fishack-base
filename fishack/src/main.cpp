@@ -2,9 +2,9 @@
 #include <iostream>
 #include <vector>
 
+#include "Shape.h"
 #include "Points.h"
 #include "Vector2.h"
-#include "Shape.h"
 
 void movetotarget(std::vector<shape>& shapes, std::vector<point>& points)
 {
@@ -32,6 +32,7 @@ int main(int argc, char ** argv)
 	std::vector<shape> shapes = { {0, 4}, {4, 4} };
 	for (auto & shapei : shapes)
 	{
+		shapei.addShapeToPoints(allpoints);
 		shapei.assignOffset(allpoints);
 		shapei.jiggle(allpoints);
 	}
@@ -64,6 +65,9 @@ int main(int argc, char ** argv)
 				if (event.key.keysym.sym == SDLK_SPACE) {
 					goto closeWindow;
 				}
+				if (event.key.keysym.sym == SDLK_1) {
+					shapes[0].deletePoints(allpoints, shapes);
+				}
 			}
 		}
 
@@ -93,9 +97,9 @@ int main(int argc, char ** argv)
 		movetotarget(shapes, allpoints);
 		move(allpoints, float(deltaTime));
 
-		for (shape shapei : shapes) {
+		/*for (shape shapei : shapes) {
 			shapei.jiggle(allpoints);
-		}
+		}*/
 
 		SDL_RenderPresent(renderer);
 	}

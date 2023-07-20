@@ -166,4 +166,13 @@ public:
 		if (this->y >= 0) return acos(this->x / this->mag());
 		return -acos(this->x / this->mag());
 	}
+
+	bool operator==(Vector other);
+	bool operator!=(Vector other) { return !this->operator==(other); }
 };
+
+bool Vector::operator==(Vector other)
+{
+	return (other.x == this->x) && (other.y == this->y);
+}
+

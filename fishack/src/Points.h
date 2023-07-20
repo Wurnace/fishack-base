@@ -1,4 +1,5 @@
 #pragma once
+
 #include <iostream>
 
 #include "Vector2.h"
@@ -8,6 +9,8 @@
 
 struct point : public SDL_Point
 {
+	std::vector<int> ShapeIDs;
+
 	float x = 0;
 	float y = 0;
 
@@ -22,11 +25,9 @@ struct point : public SDL_Point
 	void setOffset(int targetOffx, int targetOffy) {
 		this->targetOff = { float(targetOffx), float(targetOffy) };
 	}
-
 	void setOffset(float targetOffx, float targetOffy) {
 		this->targetOff = { targetOffx, targetOffy };
 	}
-
 	void setOffset(point other)
 	{
 		this->targetOff = { other.x, other.y };
@@ -47,7 +48,6 @@ struct point : public SDL_Point
 	void add(Vector other) {
 		this->operator+=(other);
 	}
-
 	point operator+(Vector other)
 	{
 		point result;
@@ -96,8 +96,18 @@ struct point : public SDL_Point
 	}
 	void operator/=(int sf)
 	{
-		this->x /= sf;
+		this->x /= sf; // Scale Factor
 		this->y /= sf;
+	}
+
+	bool operator==(point& other)
+	{
+		if (other.x != this->x)			return false;
+		if (other.y != this->y)			return false;
+		if (other.vel != this->vel)		return false;
+		if (other.force != this->force) return false;
+
+		return true;
 	}
 
 	float distTo(Vector other)
@@ -125,8 +135,8 @@ struct point : public SDL_Point
 		this->vel += this->force * delta;
 		this->add(vel * delta);
 
-		this->vel *= 0.99f;
-		this->force *= 0.0f;
+		this->vel *= 0.999f;
+		this->force *= 0.25f;
 	}
 
 	void moveToTarget(Vector Target);

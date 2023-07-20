@@ -2,6 +2,7 @@
 
 #include <vector> //Lists
 #include <functional> // Use Lambda functions for "ForeachPoint()"
+#include <algorithm> // Used for deleting Point's Index. 
 
 #include "Points.h"
 
@@ -19,14 +20,34 @@ float getarea(std::vector<point>& points)
 
 struct shape
 {
-	shape() {};
+	shape() { this->randomizeId(); };
 	shape(int start, int size) {
-		for (int i = start; i < start + size; i++) this->indices.push_back(i);
+		this->addIndices(start, size);
+		this->randomizeId();
 	}
+
+	void addIndices(int start, int size) {
+		for (int i = start; i < start + size; i++) {
+			this->indices.push_back(i);
+		}
+	}
+
+	void addShapeToPoints(std::vector<point>& points);
+
+	int getId() { return this->id;  }
+
+private:
+	void randomizeId()
+	{
+		this->id = rand() % 10000;
+	}
+	int id = 0;
 
 	std::vector<unsigned int> indices;
 
+public:
 	void foreachPoint(std::vector<point>& points, std::function<void(point&)> func);
+	void foreachPoint(std::vector<point>& points, std::function<void(point&, int)> func);
 	void foreachPoint(std::vector<point>& points, std::function<void(point&, point)> func);
 
 	point averagepoint(std::vector<point>& points);
@@ -34,12 +55,72 @@ struct shape
 	void assignOffset(std::vector<point>& points);
 	void jiggle(std::vector<point>& points);
 	void movetotarget(std::vector<point>& points);
+
+	void removeIndex(int idx)
+	{
+		indices.erase(std::remove(indices.begin(), indices.end(), idx), indices.end());
+		if (indices.size() < 1) this->deleteShape();
+	}
+
+	void deleteShape() { delete this;  }
+	void deleteShapePoints(std::vector<point>& points) 
+		// Only deletes points - not shapes they connect to too.
+	{
+		this->foreachPoint(points, [](point curPoint) {
+			delete &curPoint;
+		});
+		this->deleteShape();
+	}
+
+	void deletePoints(std::vector<point>& points, std::vector<shape>& shapes)
+		// Deletes points and shapes they connect to.
+	{
+		this->foreachPoint(points, [&](point& curPoint, int idx) {
+			for (int shape_id : curPoint.ShapeIDs)
+			{
+				for (shape n : shapes) if (n.getId() == shape_id)
+				{
+					//n.removeIndex(idx);
+				}
+			}
+			points[idx] = {};
+			// delete curPoint;
+		});
+		// this->deleteShape();
+
+		/*
+		int idx = 0;
+		for (shape n : shapes) if (n.getId() == this->id) {
+			idx = 0; 
+			break;
+		}
+		*/
+		//shapes.erase(std::remove(shapes.begin(), shapes.end(), idx), shapes.end());
+	}
 };
+
+void shape::addShapeToPoints(std::vector<point>& points)
+{
+	this->foreachPoint(points, [&](point curPoint) {
+		for (int &shapeID : curPoint.ShapeIDs)
+		{
+			if (shapeID == this->id) return;
+		}
+		curPoint.ShapeIDs.push_back(this->id);
+	});
+}
 
 void shape::foreachPoint(std::vector<point>& points, std::function<void(point&)> func)
 {
 	for (int i = 0; i < this->indices.size(); i++) {
 		func(points[ this->indices[i] ]);
+	}
+}
+
+void shape::foreachPoint(std::vector<point>& points, std::function<void(point&, int)> func)
+{
+	for (int i = 0; i < this->indices.size(); i++) {
+		func(points[this->indices[i]], i);
 	}
 }
 
@@ -86,7 +167,7 @@ void shape::jiggle(std::vector<point>& points)
 {
 	this->foreachPoint(points, [](point& curPoint) {
 		Vector unit_random = { float(rand() % 3 - 1), float(rand() % 3 - 1) };
-		curPoint.vel += unit_random * 1/8;
+		curPoint.vel += unit_random * 4;
 	});
 }
 
