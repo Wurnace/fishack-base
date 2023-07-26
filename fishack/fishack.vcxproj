@@ -22,8 +22,11 @@
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\EntryPoint.h" />
     <ClInclude Include="src\Points.h" />
+    <ClInclude Include="src\RandomNum.h" />
     <ClInclude Include="src\Shape.h" />
+    <ClInclude Include="src\ShapeGroup.h" />
     <ClInclude Include="src\Vector2.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

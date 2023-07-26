@@ -6,6 +6,8 @@
 
 #include "Points.h"
 
+FishackBegin
+
 float getarea(std::vector<point>& points)
 {
 	float area = 0.0;
@@ -39,13 +41,15 @@ struct shape
 private:
 	void randomizeId()
 	{
-		this->id = rand() % 10000;
+		this->id = rand() % 100000;
 	}
 	int id = 0;
 
 	std::vector<unsigned int> indices;
 
 public:
+	std::vector<unsigned int> getIndices() { return indices; }
+
 	void foreachPoint(std::vector<point>& points, std::function<void(point&)> func);
 	void foreachPoint(std::vector<point>& points, std::function<void(point&, int)> func);
 	void foreachPoint(std::vector<point>& points, std::function<void(point&, point)> func);
@@ -53,23 +57,28 @@ public:
 	point averagepoint(std::vector<point>& points);
 	float averageangle(std::vector<point>& points, point averagep);
 	void assignOffset(std::vector<point>& points);
-	void jiggle(std::vector<point>& points);
+	void jiggle(std::vector<point>& points, float force);
 	void movetotarget(std::vector<point>& points);
 
 	void removeIndex(int idx)
 	{
 		indices.erase(std::remove(indices.begin(), indices.end(), idx), indices.end());
-		if (indices.size() < 1) this->deleteShape();
 	}
 
-	void deleteShape() { delete this;  }
-	void deleteShapePoints(std::vector<point>& points) 
+	void deleteShape(std::vector<shape>& shapes, unsigned int shapeIdx) 
+	{
+		if (shapes.size() == 1) return shapes.clear();
+		shapes.erase(shapes.begin() + shapeIdx);
+	}
+
+	void deleteShapePoints(std::vector<point>& points)
 		// Only deletes points - not shapes they connect to too.
 	{
-		this->foreachPoint(points, [](point curPoint) {
-			delete &curPoint;
-		});
-		this->deleteShape();
+		for (int j = 0; j < this->indices.size(); j++)
+		{
+			int i = this->indices[j];
+			points[i] = {0, 0};
+		}
 	}
 
 	void deletePoints(std::vector<point>& points, std::vector<shape>& shapes)
@@ -163,20 +172,22 @@ void shape::assignOffset(std::vector<point>& points) {
 	});
 }
 
-void shape::jiggle(std::vector<point>& points)
+void shape::jiggle(std::vector<point>& points, float force)
 {
-	this->foreachPoint(points, [](point& curPoint) {
+	this->foreachPoint(points, [force](point& curPoint) {
 		Vector unit_random = { float(rand() % 3 - 1), float(rand() % 3 - 1) };
-		curPoint.vel += unit_random * 4;
+		curPoint.vel += unit_random * force;
 	});
 }
 
 void shape::movetotarget(std::vector<point>& points)
 {
-	point average = averagepoint(points);
+	point average = averagepoint(points) * 2;
 	float angleaverage = averageangle(points, average);
 	this->foreachPoint(points, [&average, &angleaverage](point& curPoint) {
 		Vector OffsetCopy = (curPoint.targetOff).rotateNew(angleaverage, { 0, 0 });
 		curPoint.moveToTarget(average.getVector() + OffsetCopy);
 	});
 }
+
+FishackEnd

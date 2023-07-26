@@ -4,6 +4,8 @@
 
 #include "Vector2.h"
 
+FishackBegin
+
 #define Round(x, presc) round(x * presc) / presc
 // Round used in point::angleBetween();
 
@@ -50,7 +52,7 @@ struct point : public SDL_Point
 	}
 	point operator+(Vector other)
 	{
-		point result;
+		point result(*this);
 		result.x = this->x + other.x;
 		result.y = this->y + other.y;
 		return result;
@@ -63,7 +65,7 @@ struct point : public SDL_Point
 
 	point operator-(point other)
 	{
-		point result;
+		point result(*this);
 		result.x = this->x - other.x;
 		result.y = this->y - other.y;
 		return result;
@@ -76,7 +78,7 @@ struct point : public SDL_Point
 
 	point operator*(int sf)
 	{
-		point result;
+		point result(*this);
 		result.x *= sf;
 		result.y *= sf;
 		return result;
@@ -89,7 +91,7 @@ struct point : public SDL_Point
 
 	point operator/(int sf)
 	{
-		point result;
+		point result(*this);
 		result.x /= sf;
 		result.y /= sf;
 		return result;
@@ -135,8 +137,8 @@ struct point : public SDL_Point
 		this->vel += this->force * delta;
 		this->add(vel * delta);
 
-		this->vel *= 0.999f;
-		this->force *= 0.25f;
+		this->vel *= 0.99f;
+		this->force *= 0.0f;
 	}
 
 	void moveToTarget(Vector Target);
@@ -150,11 +152,13 @@ float point::angleBetween(point pt1, point pt2)
 	return a - b;
 }
 
-void point::moveToTarget(Vector Target) {
-	float dist = this->distTo(Target);
-	if (dist < 25)
-	{
-		dist = 25;
-	}
-	this->applyForce((Target - this->getVector()) / dist);
+void point::moveToTarget(Vector Target)
+{
+	Vector desired = Target - this->getVector();
+	desired.setMag(10.0f);
+	Vector steering = desired - this->vel;
+	steering.limit(1.0f);
+	this->applyForce(steering);
 }
+
+FishackEnd

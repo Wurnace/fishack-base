@@ -3,6 +3,8 @@
 #include "SDL.h"
 #include <iostream>
 
+FishackBegin
+
 struct Vector
 {
 public:
@@ -22,6 +24,7 @@ public:
 
 	void setMag(float mag)
 	{
+		if (this->mag() == 0) return;
 		this->x *= mag / this->mag();
 		this->y *= mag / this->mag();
 	}
@@ -35,6 +38,14 @@ public:
 		else
 		{
 			return { 0, 0 };
+		}
+	}
+
+	void limit(float maxMag)
+	{
+		if (this->mag() > maxMag)
+		{
+			this->setMag(maxMag);
 		}
 	}
 
@@ -176,3 +187,4 @@ bool Vector::operator==(Vector other)
 	return (other.x == this->x) && (other.y == this->y);
 }
 
+FishackEnd
