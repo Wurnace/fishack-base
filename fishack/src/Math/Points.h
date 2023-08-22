@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <vector>
 
 #include "Vector2.h"
 
@@ -13,8 +14,8 @@ struct point : public SDL_Point
 {
 	std::vector<int> ShapeIDs;
 
-	float x = 0;
-	float y = 0;
+	float x;
+	float y;
 
 	Vector targetOff;
 
@@ -104,10 +105,14 @@ struct point : public SDL_Point
 
 	bool operator==(point& other)
 	{
+		// Check Basic Position
 		if (other.x != this->x)			return false;
 		if (other.y != this->y)			return false;
+		// Check Different Attributes
 		if (other.vel != this->vel)		return false;
 		if (other.force != this->force) return false;
+		// Check If Memory Address of other == this. 
+		if (&other == &(*this))			return false;
 
 		return true;
 	}
@@ -127,13 +132,20 @@ struct point : public SDL_Point
 		this->force += force;
 	}
 
-	float angleBetween(point pt1, point pt2);
+	float angleBetween(point pt1, point pt2)
+	{
+		float a = (pt1.getVector() - this->getVector()).heading();
+		float b = (pt2.getVector() - this->getVector()).heading();
+
+		return a - b;
+	}
 
 	void Update() {
 		this->Update(1);
 	}
 
-	void Update(float delta) {
+	void Update(float delta)
+	{
 		this->vel += this->force * delta;
 		this->add(vel * delta);
 
@@ -141,24 +153,14 @@ struct point : public SDL_Point
 		this->force *= 0.0f;
 	}
 
-	void moveToTarget(Vector Target);
+	void moveToTarget(Vector Target)
+	{
+		Vector desired = Target - this->getVector();
+		desired.setMag(20.0f);
+		Vector steering = desired - this->vel;
+		steering.limit(2.5f);
+		this->applyForce(steering);
+	}
 };
-
-float point::angleBetween(point pt1, point pt2)
-{
-	float a = (pt1.getVector() - this->getVector()).heading();
-	float b = (pt2.getVector() - this->getVector()).heading();
-
-	return a - b;
-}
-
-void point::moveToTarget(Vector Target)
-{
-	Vector desired = Target - this->getVector();
-	desired.setMag(10.0f);
-	Vector steering = desired - this->vel;
-	steering.limit(1.0f);
-	this->applyForce(steering);
-}
 
 FishackEnd
