@@ -3,6 +3,8 @@
 #include "SDL.h"
 #include <iostream>
 
+FishackBegin
+
 struct Vector
 {
 public:
@@ -10,6 +12,7 @@ public:
 	Vector(float x, float y) : x(x), y(y) {}
 	float x;
 	float y;
+
 	float mag()
 	{
 		return sqrt((this->x * this->x) + (this->y * this->y));
@@ -22,6 +25,7 @@ public:
 
 	void setMag(float mag)
 	{
+		if (this->mag() == 0) return;
 		this->x *= mag / this->mag();
 		this->y *= mag / this->mag();
 	}
@@ -38,9 +42,17 @@ public:
 		}
 	}
 
+	void limit(float maxMag)
+	{
+		if (this->mag() > maxMag)
+		{
+			this->setMag(maxMag);
+		}
+	}
+
 	Vector normalize()
 	{
-		return this->copy().setNewMag(1);
+		return this->setNewMag(1);
 	}
 
 	Vector copy()
@@ -167,12 +179,8 @@ public:
 		return -acos(this->x / this->mag());
 	}
 
-	bool operator==(Vector other);
+	bool operator==(Vector other) { return (other.x == this->x) && (other.y == this->y); }
 	bool operator!=(Vector other) { return !this->operator==(other); }
 };
 
-bool Vector::operator==(Vector other)
-{
-	return (other.x == this->x) && (other.y == this->y);
-}
-
+FishackEnd

@@ -19,12 +19,23 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Renderer.cpp" />
+    <ClCompile Include="src\Events\EventHandler.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Shapes\Shape.cpp" />
+    <ClCompile Include="src\Shapes\ShapeGroup.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Points.h" />
-    <ClInclude Include="src\Shape.h" />
-    <ClInclude Include="src\Vector2.h" />
+    <ClInclude Include="src\Renderer.h" />
+    <ClInclude Include="src\Events\EventHandler.h" />
+    <ClInclude Include="src\EntryPoint.h" />
+    <ClInclude Include="src\Math\Points.h" />
+    <ClInclude Include="src\Math\RandomNum.h" />
+    <ClInclude Include="src\Shapes\AllShapes.h" />
+    <ClInclude Include="src\Shapes\Shape.h" />
+    <ClInclude Include="src\Shapes\ShapeGroup.h" />
+    <ClInclude Include="src\Shapes\Square.h" />
+    <ClInclude Include="src\Math\Vector2.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -100,7 +111,8 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Dependancies\SDL2-2.26.4\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)fishack\src;$(SolutionDir)Dependancies\SDL2-2.26.4\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -114,7 +126,8 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Dependancies\SDL2-2.26.4\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)fishack\src;$(SolutionDir)Dependancies\SDL2-2.26.4\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -130,7 +143,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Dependancies\SDL2-2.26.4\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)fishack\src;$(SolutionDir)Dependancies\SDL2-2.26.4\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -148,7 +162,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Dependancies\SDL2-2.26.4\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)fishack\src;$(SolutionDir)Dependancies\SDL2-2.26.4\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
