@@ -105,19 +105,11 @@ struct point : public SDL_Point
 
 	bool operator==(point& other)
 	{
-		// Check Basic Position
-		if (other.x != this->x)			return false;
-		if (other.y != this->y)			return false;
-		// Check Different Attributes
-		if (other.vel != this->vel)		return false;
-		if (other.force != this->force) return false;
-		// Check If Memory Address of other == this. 
-		if (&other == &(*this))			return false;
-
-		return true;
+		// Check If Memory Address of other == this
+		return (&other == this);
 	}
 
-	float distTo(Vector other)
+	float distTo(Vector other) const
 	{
 		return sqrt(
 			(this->x - other.x) * (this->x - other.x) +

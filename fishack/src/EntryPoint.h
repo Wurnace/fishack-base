@@ -29,8 +29,12 @@ int entryPoint(int argc, char ** argv)
 		// Shapei.jiggle(allShapeGroups[0].points, 0.0f);
 	});
 
-	allShapeGroups[0].AddShape( Square( 0,  0, 140) );
-	allShapeGroups[0].AddShape( Square(45, 65,  80) );
+	allShapeGroups[0].AddShape(Square(280, 80, 80));
+	allShapeGroups[0].AddShape(Square(45, 65, 80));
+
+	allShapeGroups[0].Shapes[0].foreachPoint(allShapeGroups[0].points, [&](point& current){
+		//current.vel += {-26, 0};
+		});
 
 	   //int cameraShape = 0;
 	/*
@@ -86,7 +90,8 @@ int entryPoint(int argc, char ** argv)
 
 			Vector center = average.getVector() - Vector(320, 240);
 			int idx = (int)allShapeGroups[0].Shapes.size();
-			allShapeGroups[0].AddShape(Square(pos + center, 60));
+			allShapeGroups[0].AddShape(Polygon((pos + center).x, (pos + center).y, 60, 100, 123));
+			allShapeGroups[0].ShapeAt(idx).jiggle(allShapeGroups[0].points, 5);
 		}
 		std::cout << "// + To " << allShapeGroups[0].Shapes.size() << std::endl;
 	});
@@ -128,8 +133,6 @@ int entryPoint(int argc, char ** argv)
 			shape.jiggle(allShapeGroups[0].points, force);
 		}
 		*/
-
-		std::cout << "";
 
 		SDL_RenderPresent(m_renderer);
 	}

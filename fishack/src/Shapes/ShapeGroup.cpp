@@ -206,12 +206,15 @@ Shape ShapeGroup::ShapeAt(int index)
 	return {};
 }
 
-void ShapeGroup::resolveCollision(int shapeID, Shape other, std::vector<point> otherPoints)
+void ShapeGroup::resolveCollision(int shapeID, const Shape& other, std::vector<point>& otherPoints)
 {
 	other.foreachPoint(otherPoints, [&](point& pt) {
-		if (!this->Shapes.at(shapeID).isPointInShape(pt, this->points)) return;
 		this->Shapes.at(shapeID).resolveCollisions(pt, this->points);
-	});
+	});/*
+	this->Shapes.at(shapeID).foreachPoint(otherPoints, [&](point& pt) {
+		if (!other.isPointInShape(pt, otherPoints)) return;
+		other.resolveCollisions(pt, otherPoints);
+	});*/
 }
 
 /**

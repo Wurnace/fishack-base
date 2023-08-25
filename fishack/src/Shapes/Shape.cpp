@@ -128,17 +128,22 @@ bool Shape::isPointInShape(point& pt, std::vector<point>& allpoints)
 	for (int i = 0; i < this->indices.size(); i++)
 	{
 		int j = (i + 1) % this->indices.size();
-		const Vector v1 = allpoints[i].getVector();
-		const Vector v2 = allpoints[j].getVector();
+		Vector* v1 = &allpoints[i].getVector();
+		Vector* v2 = &allpoints[j].getVector();
+		if ((pt.y < v2->y) == (pt.y > v1->y)) continue;
 
-		if (
-			(pt.y < v1.y) != (pt.y < v2.y) &&
-			pt.x < (v1.x + ((pt.y - v1.y) / (v2.y - v1.y)) * (v2.x - v1.x))
-		) {
-			cnt++;
+		if (v1->x == v2->x)
+		{
+			if (pt.x < v1->x) cnt++;
+			continue;
 		}
+		float m = (v2->y - v1->y) / (v2->x - v1->x);
+		float c = v1->y - v1->x * m;
+
+		if (pt.x < (pt.y - c) / m) cnt++;
 	}
-	return (cnt % 2) == 1;
+	std::cout << cnt << std::endl;
+	return (cnt % 2);
 }
 
 namespace Projections
@@ -209,8 +214,8 @@ void Shape::fixCollision(point& pt, std::vector<point>& allpoints)
 
 	// Apply the Forces.  
 	pt.moveToTarget(ClosestEdge.Proj);
-	allpoints[ClosestEdge.edgeIdx1].moveToTarget(allpoints[ClosestEdge.edgeIdx1].getVector() - dir * ratio);
-	allpoints[ClosestEdge.edgeIdx2].moveToTarget(allpoints[ClosestEdge.edgeIdx2].getVector() - dir * (1 - ratio));
+	//allpoints[ClosestEdge.edgeIdx1].moveToTarget(allpoints[ClosestEdge.edgeIdx1].getVector() - dir * ratio);
+	//allpoints[ClosestEdge.edgeIdx2].moveToTarget(allpoints[ClosestEdge.edgeIdx2].getVector() - dir * (1 - ratio));
 }
 
 void Shape::resolveCollisions(point& pt, std::vector<point>& allpoints)

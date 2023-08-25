@@ -30,7 +30,7 @@ public:
 	void show(Renderer& renderer);
 	void Update(float deltaTime);
 
-	void resolveCollision(int ID, Shape other, std::vector<point> otherPoints);
+	void resolveCollision(int ID, const Shape& other, std::vector<point>& otherPoints);
 
 	int getShapeID(int index);
 	Shape ShapeAt(int index);
