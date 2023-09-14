@@ -3,7 +3,7 @@
 	#define FishackEnd }
 #endif
 
-#include "Math/Points.h"
+#include "Maths/Points.h"
 #include "Shape.h"
 
 #include "Renderer.h"

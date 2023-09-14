@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Math/Vector2.h"
+#include "Maths/Vector2.h"
 
 FishackBegin
 

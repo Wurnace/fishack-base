@@ -6,7 +6,7 @@
 #include <functional> // Use Lambda functions for "ForeachPoint()"
 #include <algorithm> // Used for deleting Point's Index. 
 
-#include "Math/Points.h"
+#include "Maths/Points.h"
 
 FishackBegin
 
@@ -51,7 +51,6 @@ public:
 	void jiggle(std::vector<point>& points, float force);
 	void movetotarget(std::vector<point>& points);
 
-	bool isPointInShape(point& pt, std::vector<point>& allpoints);
 	void fixCollision(point& pt, std::vector<point>& allpoints);
 	void resolveCollisions(point& pt, std::vector<point>& allpoints);
 

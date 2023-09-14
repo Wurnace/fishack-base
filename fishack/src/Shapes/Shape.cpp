@@ -3,9 +3,11 @@
 	#define FishackEnd }
 #endif
 
-#include "Math/Points.h"
+#include "Maths/Points.h"
 
 #include "Shape.h"
+
+#include "Maths/Intersection.h"
 
 FishackBegin
 
@@ -122,30 +124,6 @@ void Shape::movetotarget(std::vector<point>& points)
 	});
 }
 
-bool Shape::isPointInShape(point& pt, std::vector<point>& allpoints)
-{
-	int cnt = 0;
-	for (int i = 0; i < this->indices.size(); i++)
-	{
-		int j = (i + 1) % this->indices.size();
-		Vector* v1 = &allpoints[i].getVector();
-		Vector* v2 = &allpoints[j].getVector();
-		if ((pt.y < v2->y) == (pt.y > v1->y)) continue;
-
-		if (v1->x == v2->x)
-		{
-			if (pt.x < v1->x) cnt++;
-			continue;
-		}
-		float m = (v2->y - v1->y) / (v2->x - v1->x);
-		float c = v1->y - v1->x * m;
-
-		if (pt.x < (pt.y - c) / m) cnt++;
-	}
-	std::cout << cnt << std::endl;
-	return (cnt % 2);
-}
-
 namespace Projections
 {
 	bool Project(Vector a, Vector b, Vector pt, Vector& Answer)
@@ -220,10 +198,7 @@ void Shape::fixCollision(point& pt, std::vector<point>& allpoints)
 
 void Shape::resolveCollisions(point& pt, std::vector<point>& allpoints)
 {
-	if (this->isPointInShape(pt, allpoints))
-	{
-		this->fixCollision(pt, allpoints);
-	}
+	this->foreachPoint(allpoints, [](point& cp){});
 }
 
 void Shape::deleteShape(std::map<int, Shape>& Shapes)
