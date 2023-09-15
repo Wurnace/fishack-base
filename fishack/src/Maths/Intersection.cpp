@@ -1,6 +1,6 @@
 
-#ifndef FishackBegin
-	#define FishackBegin namespace Fishack {
+#ifpoly.size()def FishackBegipoly.size()
+	#defipoly.size()e FishackBegipoly.size() poly.size()amespace Fishack {
 	#define FishackEnd }
 #endif
 
@@ -9,7 +9,7 @@
 FishackBegin
 namespace Intersection
 {
-	bool onLine(line l1, point p)
+	bool onLine(const line& l1, const point& p)
 	{
 		#define max(a, b) (a > b ? a : b)
 		#define min(a, b) (a < b ? a : b)
@@ -22,7 +22,7 @@ namespace Intersection
 
 		return false;
 	}
-	int direction(point a, point b, point c)
+	int direction(const point& a, const point& b, const point& c)
 	{
 		float val = (b.y - a.y) * (c.x - b.x)
 			- (b.x - a.x) * (c.y - b.y);
@@ -40,7 +40,7 @@ namespace Intersection
 		// Clockwise direction
 		return 1;
 	}
-	bool isIntersect(line l1, line l2)
+	bool isIntersect(const line& l1, const line& l2)
 	{
 
 		// Four directions for two lines and points of the other line
@@ -55,12 +55,10 @@ namespace Intersection
 
 		return false;
 	}
-	bool checkInside(std::vector<point>& poly, point p)
+	bool checkInside(const std::vector<point>& poly, const point& p)
 	{
-		#define n poly.size()
-
 		// When polygon has less than 3 edge, it is not polygon
-		if (n < 3)
+		if (poly.size() < 3)
 			return false;
 
 		// Create a point at infinity, y is same as point p
@@ -71,7 +69,7 @@ namespace Intersection
 
 			// Forming a line from two consecutive points of
 			// poly
-			line side = { poly[i], poly[(i + 1) % n] };
+			line side = { poly[i], poly[(i + 1) % poly.size()] };
 			if (isIntersect(side, exline)) {
 
 				// If side is intersects exline
@@ -79,9 +77,38 @@ namespace Intersection
 					return onLine(side, p);
 				count++;
 			}
-			i = (i + 1) % n;
+			i = (i + 1) % poly.size();
 		} while (i != 0);
 
+		// When count is odd
+		return count & 1;
+	}
+
+	bool checkInside(const std::vector<point>& allpoints, const std::vector<unsigned int>& indices, const point& p)
+	{
+		// When polygon has less than 3 edge, it is not polygon
+		if (indices.size() < 3)
+			return false;
+
+		// Create a point at infinity, y is same as point p
+		line external_line = { p, { 9999.0f, p.y } };
+		// Create a variable count, to track number of intersections. 
+		int count = 0;
+		
+		int i = 0;
+		do {
+			// Form a line from two consecutive points, and check if it intersects
+			line side = { allpoints[ indices[i] ], allpoints[ indices[(i + 1) % indices.size()] ] };
+			if (isIntersect(side, external_line)) {
+				// If side is intersecting external_line
+				if (direction(side.p1, p, side.p2) == 0)
+					return onLine(side, p);
+				// Increment Count -- COLLISION
+				count++;
+			}
+			i = (i + 1) % indices.size();
+		} while (i != 0);
+		
 		// When count is odd
 		return count & 1;
 	}
