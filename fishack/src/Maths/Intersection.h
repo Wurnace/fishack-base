@@ -7,9 +7,10 @@
 FishackBegin
 namespace Intersection
 {
-	bool onLine(line, point);
-	int direction(point, point, point);
-	bool isIntersect(line, line);
-	bool checkInside(std::vector<point>&, point);
+	bool onLine(const line&, const point&);
+	int direction(const point&, const point&, const point&);
+	bool isIntersect(const line&, const line&);
+	bool checkInside(const std::vector<point>&, const point&);
+	bool checkInside(const std::vector<point>& allpoints, const std::vector<unsigned int>& indices, const point& p)
 }
 FishackEnd
