@@ -1,6 +1,6 @@
 
-#ifpoly.size()def FishackBegipoly.size()
-	#defipoly.size()e FishackBegipoly.size() poly.size()amespace Fishack {
+#ifndef FishackBegin
+	#define FishackBegin namespace Fishack {
 	#define FishackEnd }
 #endif
 

@@ -5,7 +5,7 @@
 #include "Shapes/AllShapes.h"
 #include "Events/EventHandler.h"
 
-#include "Math/RandomNum.h"
+#include "Maths/RandomNum.h"
 
 #include "Renderer.h"
 
@@ -26,7 +26,7 @@ int entryPoint(int argc, char ** argv)
 	{
 		Shapei.addShapeToPoints(allShapeGroups[0].points);
 		Shapei.assignOffset(allShapeGroups[0].points);
-		// Shapei.jiggle(allShapeGroups[0].points, 0.0f);
+		Shapei.jiggle(allShapeGroups[0].points, 10.0f);
 	});
 
 	allShapeGroups[0].AddShape(Square(280, 80, 80));

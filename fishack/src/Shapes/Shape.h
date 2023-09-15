@@ -31,7 +31,7 @@ public:
 
 	void addIndex(int idx);
 	void addIndices(int start, int size);
-	int findPointIndex(point& pt, std::vector<point>& points) const;
+	int findPointIndex(const point& pt, const std::vector<point>& points) const;
 	void removeIndex(int idx);
 
 	void addShapeToPoints(std::vector<point>& points);
@@ -46,13 +46,13 @@ public:
 	void foreachPoint(std::vector<point>& points, std::function<void(point&, point&)> func) const;
 
 	point averagepoint(std::vector<point>& points) const;
-	float averageangle(std::vector<point>& points, point averagep) const;
+	float averageangle(std::vector<point>& points, point& averagep) const;
 	void assignOffset(std::vector<point>& points);
 	void jiggle(std::vector<point>& points, float force);
 	void movetotarget(std::vector<point>& points);
 
 	void fixCollision(point& pt, std::vector<point>& allpoints);
-	void resolveCollisions(point& pt, std::vector<point>& allpoints);
+	void resolveCollisions(const point& pt, const std::vector<point>& allpoints);
 
 	void deleteShape(std::map<int, Shape>& Shapes);
 	void deleteShapePoints(std::vector<point>& points);

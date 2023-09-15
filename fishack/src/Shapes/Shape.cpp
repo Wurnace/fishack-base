@@ -23,14 +23,14 @@ Shape::Shape(size_t start, size_t size)
 	this->addIndices((int)start, (int)size);
 }
 
-void Shape::assignOffset(const std::vector<point>& points) {
+void Shape::assignOffset(std::vector<point>& points) {
 	point average = this->averagepoint(points);
 	this->foreachPoint(points, [&average](point& curPoint) {
 		curPoint.setOffset(curPoint - average);
 	});
 }
 
-void Shape::addShapeToPoints(const std::vector<point>& points)
+void Shape::addShapeToPoints(std::vector<point>& points)
 {
 	this->foreachPoint(points, [&](point curPoint) {
 		for (int &ShapeID : curPoint.ShapeIDs)
@@ -63,19 +63,19 @@ int Shape::findPointIndex(const point& pt, const std::vector<point>& points) con
 	return -1;
 }
 
-void Shape::foreachPoint(const std::vector<point>& points, std::function<void(point&)> func) const 
+void Shape::foreachPoint(std::vector<point>& points, std::function<void(point&)> func) const 
 {
 	for (int i = 0; i < this->indices.size(); i++) {
 		func(points[this->indices[i]]);
 	}
 }
-void Shape::foreachPoint(const std::vector<point>& points, std::function<void(point&, int)> func) const
+void Shape::foreachPoint(std::vector<point>& points, std::function<void(point&, int)> func) const
 {
 	for (int i = 0; i < this->indices.size(); i++) {
 		func(points[this->indices[i]], i);
 	}
 }
-void Shape::foreachPoint(const std::vector<point>& points, std::function<void(point&, point&)> func) const
+void Shape::foreachPoint(std::vector<point>& points, std::function<void(point&, point&)> func) const
 {
 	for (int i = 0; i < this->indices.size(); i++) {
 		int j = (i - 1); if (j < 0) j = int(this->indices.size() - 1);
@@ -83,7 +83,7 @@ void Shape::foreachPoint(const std::vector<point>& points, std::function<void(po
 	}
 }
 
-point Shape::averagepoint(const std::vector<point>& points) const
+point Shape::averagepoint(std::vector<point>& points) const
 {
 	point average = { 0, 0 };
 	this->foreachPoint(points, [&average](point& curPoint) {
@@ -92,7 +92,7 @@ point Shape::averagepoint(const std::vector<point>& points) const
 	average /= (int)this->indices.size();
 	return average;
 }
-float Shape::averageangle(const std::vector<point>& points, const point& averagep) const
+float Shape::averageangle(std::vector<point>& points, point& averagep) const
 {
 	float average = 0;
 
@@ -106,7 +106,7 @@ float Shape::averageangle(const std::vector<point>& points, const point& average
 	return average / points.size();
 }
 
-void Shape::jiggle(const std::vector<point>& points, float force)
+void Shape::jiggle(std::vector<point>& points, float force)
 {
 	this->foreachPoint(points, [force](point& curPoint) {
 		Vector unit_random = { float(rand() % 3 - 1), float(rand() % 3 - 1) };
@@ -114,7 +114,7 @@ void Shape::jiggle(const std::vector<point>& points, float force)
 	});
 }
 
-void Shape::movetotarget(const std::vector<point>& points)
+void Shape::movetotarget(std::vector<point>& points)
 {
 	point average = averagepoint(points);
 	float angleaverage = averageangle(points, average);
@@ -152,7 +152,7 @@ namespace Projections
 
 		float dist = INFINITY;
 	};
-	void Project(const point& pt, int a, int b, const std::vector<point>& allPoints, std::vector<Projection>& Result)
+	void Project(point& pt, int a, int b, std::vector<point>& allPoints, std::vector<Projection>& Result)
 	{
 		Vector v;
 		if (Project(allPoints[a].getVector(), allPoints[a].getVector(), pt.getVector(), v))
@@ -162,7 +162,7 @@ namespace Projections
 	}
 }
 
-void Shape::fixCollision(const point& pt, const std::vector<point>& allpoints)
+void Shape::fixCollision(point& pt, std::vector<point>& allpoints)
 {
 	using namespace Projections;
 
@@ -198,7 +198,7 @@ void Shape::fixCollision(const point& pt, const std::vector<point>& allpoints)
 
 void Shape::resolveCollisions(const point& pt, const std::vector<point>& allpoints)
 {
-	if(!Intersection::checkInside(allpoints))
+	if(!Intersection::checkInside(allpoints, this->indices, pt))
 		return;
 
 	// Pysics Code goes Here
@@ -210,7 +210,7 @@ void Shape::resolveCollisions(const point& pt, const std::vector<point>& allpoin
 	// BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH
 }
 
-void Shape::deleteShape(const std::map<int, Shape>& Shapes)
+void Shape::deleteShape(std::map<int, Shape>& Shapes)
 {
 	if (Shapes.find(this->id) == Shapes.end()) return;
 
@@ -226,7 +226,7 @@ void Shape::deleteShapePoints(std::vector<point>& points)
 		points[i] = {};
 	}
 }
-void Shape::deletePoints(const std::vector<point>& points, const std::map<int, Shape>& Shapes)
+void Shape::deletePoints(std::vector<point>& points, std::map<int, Shape>& Shapes)
 // Deletes points and Shapes they connect to.
 {
 	this->foreachPoint(points, [&](point& curPoint, int idx) {

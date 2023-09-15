@@ -44,7 +44,7 @@ struct point : public SDL_Point
 		this->set(other.x, other.y);
 	}
 
-	Vector getVector() {
+	Vector getVector() const {
 		return { this->x, this->y };
 	}
 
@@ -109,6 +109,12 @@ struct point : public SDL_Point
 		return (&other == this);
 	}
 
+	bool operator==(const point& other) const
+	{
+		// Check If Memory Address of other == this
+		return (&other == this);
+	}
+
 	float distTo(Vector other) const
 	{
 		return sqrt(
@@ -124,7 +130,7 @@ struct point : public SDL_Point
 		this->force += force;
 	}
 
-	float angleBetween(point pt1, point pt2)
+	float angleBetween(const point& pt1, const point& pt2)
 	{
 		float a = (pt1.getVector() - this->getVector()).heading();
 		float b = (pt2.getVector() - this->getVector()).heading();
