@@ -157,8 +157,6 @@ public:
 		this->x = (x * c) - (y * s) + Pivot.x;
 		this->y = (x * s) + (y * c) + Pivot.y;
 
-		this->x = round(this->x * 1000) / 1000;
-		this->y = round(this->y * 1000) / 1000;
 	}
 
 	Vector rotateNew(double Angle, Vector Pivot = { 0, 0 })

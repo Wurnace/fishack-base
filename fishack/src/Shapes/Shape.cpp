@@ -103,6 +103,7 @@ float Shape::averageangle(std::vector<point>& points, point& averagep) const
 	this->foreachPoint(points, [&average, &averagep](point& curPoint) {
 		average += averagep.angleBetween(curPoint, averagep + curPoint.targetOff);
 	});
+	std::cout << average / points.size() << std::endl;
 	return average / points.size();
 }
 
