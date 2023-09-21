@@ -172,10 +172,11 @@ public:
 		myCopy.rotate(radians, Pivot);
 		return myCopy;
 	}
-
+	
 	float heading()
 	{
-		if (this->y >= 0) return acos(this->x / this->mag());
+		if (this->y >= 0)
+			return acos(this->x / this->mag());
 		return -acos(this->x / this->mag());
 	}
 
