@@ -101,7 +101,7 @@ float Shape::averageangle(std::vector<point>& points, point& averagep) const
 #endif
 
 	this->foreachPoint(points, [&average, &averagep](point& curPoint) {
-		average += averagep.angleBetween(curPoint, averagep + curPoint.targetOff);
+		average += averagep.angleBetween(averagep + curPoint.targetOff, curPoint);
 	});
 	std::cout << average / points.size() << std::endl;
 	return average / points.size();
@@ -120,8 +120,8 @@ void Shape::movetotarget(std::vector<point>& points)
 	point average = averagepoint(points);
 	float angleaverage = averageangle(points, average);
 	this->foreachPoint(points, [&average, &angleaverage](point& curPoint) {
-		Vector OffsetCopy = (curPoint.targetOff).rotateNew(angleaverage, { 0, 0 });
-		curPoint.moveToTarget(average.getVector() + OffsetCopy);
+		Vector OffsetCopy = (average.getVector() + curPoint.targetOff).rotateNew(angleaverage, average.getVector());
+		curPoint.moveToTarget(OffsetCopy);
 	});
 }
 

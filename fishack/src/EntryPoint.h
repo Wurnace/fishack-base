@@ -26,7 +26,14 @@ int entryPoint(int argc, char ** argv)
 	{
 		Shapei.addShapeToPoints(allShapeGroups[0].points);
 		Shapei.assignOffset(allShapeGroups[0].points);
-		Shapei.jiggle(allShapeGroups[0].points, 10.0f);
+		point average = Shapei.averagepoint(allShapeGroups[0].points);
+		Shapei.foreachPoint(allShapeGroups[0].points, [average](point & p)
+		{
+			Vector vec = p.getVector().rotateNew(M_PI / 8, average.getVector());
+			p.x = vec.x;
+			p.y = vec.y;
+		});
+		//Shapei.jiggle(allShapeGroups[0].points, 10.0f);
 	});
 
 	allShapeGroups[0].AddShape(Square(280, 80, 80));
@@ -123,7 +130,7 @@ int entryPoint(int argc, char ** argv)
 
 		// Update
 
-		allShapeGroups[0].resolveCollision(allShapeGroups[0].getShapeID(0), allShapeGroups[0].ShapeAt(1), allShapeGroups[0].points);
+		// allShapeGroups[0].resolveCollision(allShapeGroups[0].getShapeID(0), allShapeGroups[0].ShapeAt(1), allShapeGroups[0].points);
 		allShapeGroups[0].Update(deltaTime);
 
 		/*
