@@ -135,10 +135,11 @@ struct point : public SDL_Point
 		float a = (pt1.getVector() - this->getVector()).heading();
 		float b = (pt2.getVector() - this->getVector()).heading();
 
-		if (abs(a - b) > M_PI)
-			return (float)(2 * M_PI) - (a - b);
+		if (abs(a - b) < M_PI)
+			return a - b;
 
-		return a - b;
+		int _sign_ = (0.0f < (a - b)) - ((a - b) < 0.0f);
+		return (0 - _sign_) * abs(float(2 * M_PI) - abs(a - b));
 	}
 
 	void Update() {
