@@ -136,9 +136,7 @@ struct point : public SDL_Point
 		float b = (pt2.getVector() - this->getVector()).heading();
 
 		if (abs(a - b) > M_PI)
-		{
-			return M_PI * 2 - (a - b);
-		}
+			return (float)(2 * M_PI) - (a - b);
 
 		return a - b;
 	}
