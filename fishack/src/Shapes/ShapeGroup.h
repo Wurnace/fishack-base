@@ -27,8 +27,8 @@ public:
 	void foreachShape(std::function<void(Shape&)> func);
 	void foreachShape(std::function<void(Shape&, int)> func);
 
-	void show(Renderer& renderer);
-	void Update(float deltaTime);
+	void show(Renderer& renderer, int WW, int WH);
+	void Update(float deltaTime, float inflationfactor);
 
 	void resolveCollision(int ID, const Shape& other, std::vector<point>& otherPoints);
 
@@ -46,7 +46,7 @@ public:
 	std::map<int, Shape> Shapes;
 
 private:
-	void movetotarget();
+	void movetotarget(float inflationfactor);
 	void move(float delta);
 
 private:

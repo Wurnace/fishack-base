@@ -132,14 +132,20 @@ struct point : public SDL_Point
 
 	float angleBetween(const point& pt1, const point& pt2)
 	{
-		float a = (pt1.getVector() - this->getVector()).heading();
-		float b = (pt2.getVector() - this->getVector()).heading();
+		return angleBetween(pt1.getVector(), pt2.getVector());
+	}
+
+	float angleBetween(Vector pt1, Vector pt2)
+	{
+		float a = (pt1 - this->getVector()).heading();
+		float b = (pt2 - this->getVector()).heading();
 
 		if (abs(a - b) < M_PI)
 			return a - b;
 
 		int _sign_ = (0.0f < (a - b)) - ((a - b) < 0.0f);
 		return (0 - _sign_) * abs(float(2 * M_PI) - abs(a - b));
+
 	}
 
 	void Update() {

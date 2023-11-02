@@ -113,12 +113,12 @@ void ShapeGroup::AddShapes(std::vector<Shape> shps)
 /**
  * Invokes The 'MoveToTarget' function of Each Shape
  */
-void ShapeGroup::movetotarget()
+void ShapeGroup::movetotarget(float inflationfactor)
 {
 	RUN_IF_NOT_EMPTY(this->Shapes);
 	RUN_IF_NOT_EMPTY(this->points);
 	this->foreachShape([&](Shape& shape) {
-		shape.movetotarget(this->points);
+		shape.movetotarget(this->points, inflationfactor);
 	});
 }
 
@@ -141,19 +141,19 @@ void ShapeGroup::move(float delta)
  *
  * @param Renderer - default SDL_Renderer
  */
-void ShapeGroup::show(Renderer& renderer)
+void ShapeGroup::show(Renderer& renderer, int WW, int WH)
 {
 	RUN_IF_NOT_EMPTY(this->Shapes);
 	RUN_IF_NOT_EMPTY(this->points);
 
 	renderer.reset();
-	renderer.translate(-320, -240);
+	renderer.translate(-WW / 2, -WH / 2);
 
 	point average = this->ShapeAt(0).averagepoint(this->points);
 	renderer.translate(average.getVector());
 	this->foreachShape([&](Shape& shape)
 	{
-		renderer.fill(255, 0, 0, 255);
+		renderer.fill(shape.colour.r, shape.colour.g, shape.colour.b, shape.colour.a);
 		shape.foreachPoint(this->points, [&](point& curPoint, point& nextPoint) {
 			renderer.line(curPoint.getVector(), nextPoint.getVector());
 		});
@@ -165,11 +165,11 @@ void ShapeGroup::show(Renderer& renderer)
  *
  * @param DeltaTime - Time passed between Frames
  */
-void ShapeGroup::Update(float deltaTime)
+void ShapeGroup::Update(float deltaTime, float inflationfactor)
 {
 	RUN_IF_NOT_EMPTY(this->Shapes);
 	RUN_IF_NOT_EMPTY(this->points);
-	this->movetotarget();
+	this->movetotarget(inflationfactor);
 	this->move(deltaTime);
 }
 

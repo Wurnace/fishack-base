@@ -18,6 +18,10 @@ int entryPoint(int argc, char ** argv)
 	Uint64 NOW = 0;
 	Uint64 LAST = 0;
 	float deltaTime = 0;
+	float accumalatedDeltaTime = 0;
+	int WINDOW_WIDTH;
+	int WINDOW_HEIGHT;
+	float inflationfactor = 1;
 
 	std::vector<ShapeGroup> allShapeGroups;
 	allShapeGroups = { {} };
@@ -26,18 +30,19 @@ int entryPoint(int argc, char ** argv)
 	{
 		Shapei.addShapeToPoints(allShapeGroups[0].points);
 		Shapei.assignOffset(allShapeGroups[0].points);
+
 		point average = Shapei.averagepoint(allShapeGroups[0].points);
 		Shapei.foreachPoint(allShapeGroups[0].points, [average](point & p)
+		
 		{
-			Vector vec = p.getVector().rotateNew(M_PI / 8, average.getVector());
+			Vector vec = p.getVector().rotateNew(M_PI / 4, average.getVector());
 			p.x = vec.x;
 			p.y = vec.y;
 		});
 		//Shapei.jiggle(allShapeGroups[0].points, 10.0f);
 	});
 
-	allShapeGroups[0].AddShape(Square(280, 80, 80));
-	allShapeGroups[0].AddShape(Square(45, 65, 80));
+	allShapeGroups[0].AddShape(Square(0, 0, 10));
 
 	allShapeGroups[0].Shapes[0].foreachPoint(allShapeGroups[0].points, [&](point& current){
 		//current.vel += {-26, 0};
@@ -58,7 +63,7 @@ int entryPoint(int argc, char ** argv)
 	// Init SDL
 	SDL_Init(SDL_INIT_VIDEO);
 	SDL_Window * window = SDL_CreateWindow("Fishack",
-		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, 0);
+		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_RESIZABLE);
 	SDL_Renderer* m_renderer = SDL_CreateRenderer(window, -1, 0);
 	
 	Renderer renderer(m_renderer);
@@ -70,6 +75,12 @@ int entryPoint(int argc, char ** argv)
 		if (Event.key.keysym.sym == SDLK_SPACE) {
 			quit = true;
 			restartProject = true;
+		}
+		if (Event.key.keysym.sym == SDLK_5) {
+			inflationfactor -= 0.1;
+		}
+		if (Event.key.keysym.sym == SDLK_6) {
+			inflationfactor += 0.1;
 		}
 	});
 	m_EventHandler.Push(SDL_KEYDOWN, [&](SDL_Event& evt) {
@@ -95,10 +106,10 @@ int entryPoint(int argc, char ** argv)
 				average = allShapeGroups[0].Shapes[mean_id].averagepoint(allShapeGroups[0].points);
 			}
 
-			Vector center = average.getVector() - Vector(320, 240);
+			Vector center = average.getVector() - Vector(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 			int idx = (int)allShapeGroups[0].Shapes.size();
-			allShapeGroups[0].AddShape(Polygon((pos + center).x, (pos + center).y, 60, 100, 123));
-			allShapeGroups[0].ShapeAt(idx).jiggle(allShapeGroups[0].points, 5);
+			allShapeGroups[0].AddShape(Polygon((pos + center).x, (pos + center).y, 60, rand() % 10 + 2, 0));
+			//allShapeGroups[0].ShapeAt(idx).jiggle(allShapeGroups[0].points, 5);
 		}
 		std::cout << "// + To " << allShapeGroups[0].Shapes.size() << std::endl;
 	});
@@ -118,20 +129,27 @@ int entryPoint(int argc, char ** argv)
 		// Calculate DeltaTimes
 		NOW = SDL_GetTicks();
 		deltaTime = float(NOW - LAST) * (15.0f / 1000.0f);
-		if (deltaTime > 1.5) deltaTime = 1.5;
+		accumalatedDeltaTime += deltaTime;
 		LAST = NOW;
 
 		// Clear Window
-		SDL_SetRenderDrawColor(m_renderer, 242, 242, 242, 255);
+		SDL_SetRenderDrawColor(m_renderer, 50, 50, 60, 255);
 		SDL_RenderClear(m_renderer);
 
 		// Render
-		allShapeGroups[0].show(renderer);
+		SDL_GetWindowSize(window, &WINDOW_WIDTH, &WINDOW_HEIGHT);
+		allShapeGroups[0].show(renderer, WINDOW_WIDTH, WINDOW_HEIGHT);
 
 		// Update
 
-		// allShapeGroups[0].resolveCollision(allShapeGroups[0].getShapeID(0), allShapeGroups[0].ShapeAt(1), allShapeGroups[0].points);
-		allShapeGroups[0].Update(deltaTime);
+		while (accumalatedDeltaTime > 0.1)
+		{
+			accumalatedDeltaTime -= 0.1;
+			// allShapeGroups[0].resolveCollision(allShapeGroups[0].getShapeID(0), allShapeGroups[0].ShapeAt(1), allShapeGroups[0].points);
+			allShapeGroups[0].Update(0.1, inflationfactor);
+		}
+
+
 
 		/*
 		float force = 1.0f;

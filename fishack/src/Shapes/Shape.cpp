@@ -103,8 +103,8 @@ float Shape::averageangle(std::vector<point>& points, point& averagep) const
 	this->foreachPoint(points, [&average, &averagep](point& curPoint) {
 		average += averagep.angleBetween(averagep + curPoint.targetOff, curPoint);
 	});
-	std::cout << average / points.size() << std::endl;
-	return average / points.size();
+	//std::cout << average / (int)this->indices.size() << std::endl;
+	return average / (int)this->indices.size();
 }
 
 void Shape::jiggle(std::vector<point>& points, float force)
@@ -115,13 +115,15 @@ void Shape::jiggle(std::vector<point>& points, float force)
 	});
 }
 
-void Shape::movetotarget(std::vector<point>& points)
+void Shape::movetotarget(std::vector<point>& points, float inflationfactor)
 {
-	point average = averagepoint(points);
-	float angleaverage = averageangle(points, average);
-	this->foreachPoint(points, [&average, &angleaverage](point& curPoint) {
-		Vector OffsetCopy = (average.getVector() + curPoint.targetOff).rotateNew(angleaverage, average.getVector());
-		curPoint.moveToTarget(OffsetCopy);
+	point averagept = averagepoint(points);
+	float averageang = averageangle(points, averagept);
+	this->foreachPoint(points, [averageang, averagept](point& curpoint){
+		Vector offset = curpoint.targetOff;
+		offset.rotate(averageang);
+		curpoint.moveToTarget(offset + averagept.getVector());
+		std::cout << offset.x << std::endl;
 	});
 }
 

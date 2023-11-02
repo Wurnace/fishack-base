@@ -28,6 +28,14 @@ public:
 	Shape();
 	Shape(int start, int size);
 	Shape(size_t start, size_t size);
+	struct rgbaColour {
+		int r = 255, g = 255, b = 255, a = 255;
+		rgbaColour() {}
+		rgbaColour(int r, int g, int b) : r(r), g(g), b(b) {}
+		rgbaColour(int r, int g, int b, int a) : r(r), g(g), b(b), a(a) {}
+	};
+
+	rgbaColour colour;
 
 	void addIndex(int idx);
 	void addIndices(int start, int size);
@@ -49,7 +57,7 @@ public:
 	float averageangle(std::vector<point>& points, point& averagep) const;
 	void assignOffset(std::vector<point>& points);
 	void jiggle(std::vector<point>& points, float force);
-	void movetotarget(std::vector<point>& points);
+	void movetotarget(std::vector<point>& points, float inflationfactor);
 
 	void fixCollision(point& pt, std::vector<point>& allpoints);
 	void resolveCollisions(const point& pt, const std::vector<point>& allpoints);
